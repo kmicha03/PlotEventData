@@ -381,4 +381,6 @@ if create_plot_button:
     for text in legend.get_texts():
       text.set_color('#FFFFFF')
 
-    st.pyplot(fig)
+    #st.pyplot(fig)
+    st.plotly_chart(fig, theme=None, use_container_width=False)
+
