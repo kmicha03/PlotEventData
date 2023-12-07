@@ -36,14 +36,13 @@ from matplotlib.font_manager import FontProperties
 
 from mplsoccer import VerticalPitch
 
-print(st.secrets["db_password"])
-supabase_password = "Gamwtoapoel99!"
-project_url = "https://xkzfeabisrfkyotvpozu.supabase.co"
+supabase_password = st.secrets["db_password"]
+project_url = st.secrets["db_project_url"]
 
 conn = psycopg2.connect(
     user="postgres",
     password=supabase_password,
-    host="db.xkzfeabisrfkyotvpozu.supabase.co",
+    host= st.secrets["db_host"],
     port=5432,
     database="postgres"
 )
