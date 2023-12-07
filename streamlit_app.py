@@ -276,13 +276,13 @@ if create_plot_button:
         x=0.13, y=.60,
         s=plot_title,
         va="bottom", ha="left",
-        fontsize=12, color="white", font="Arial", weight="bold"
+        fontsize=12, color="white", weight="bold"
     )
     fig_text(
         x=0.13, y=.585,
         s=plot_title2,
         va="bottom", ha="left",
-        fontsize=9, color="#B2BEB5", font="Arial"
+        fontsize=9, color="#B2BEB5"
     )
     map_title = f"{event_type_correct_name} Map"
 
@@ -290,14 +290,14 @@ if create_plot_button:
         x=0.24, y=.56,
         s=map_title,
         va="bottom", ha="center",
-        fontsize=12, color="white", font="Arial", weight="bold"
+        fontsize=12, color="white", weight="bold"
     )
 
     fig_text(
         x=0.225, y=.149,
         s="Created by @kmicha03",
         va="bottom", ha="left",
-        fontsize=10, color="white", font="Arial"
+        fontsize=10, color="white"
     )
 
 
