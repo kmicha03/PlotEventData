@@ -44,7 +44,7 @@ conn = psycopg2.connect(
     password=supabase_password,
     host= st.secrets["db_host"],
     port=st.secrets["db_port"],
-    database="st.secrets["db_name"]"
+    database=st.secrets["db_name"]
 )
 
 
