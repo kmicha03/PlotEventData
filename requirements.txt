@@ -1,0 +1,9 @@
+highlight_text
+matplotlib
+numpy
+pandas
+seaborn
+types
+psicopg2
+mplsoccer
+
