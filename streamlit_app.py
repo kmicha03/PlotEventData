@@ -40,11 +40,11 @@ supabase_password = st.secrets["db_password"]
 project_url = st.secrets["db_project_url"]
 
 conn = psycopg2.connect(
-    user="postgres",
+    user=st.secrets["db_user"],
     password=supabase_password,
     host= st.secrets["db_host"],
-    port=5432,
-    database="postgres"
+    port=st.secrets["db_port"],
+    database="st.secrets["db_name"]"
 )
 
 
@@ -276,13 +276,13 @@ if create_plot_button:
         x=0.13, y=.60,
         s=plot_title,
         va="bottom", ha="left",
-        fontsize=12, color="white", font="DM Sans", weight="bold"
+        fontsize=12, color="white", font="Arial", weight="bold"
     )
     fig_text(
         x=0.13, y=.585,
         s=plot_title2,
         va="bottom", ha="left",
-        fontsize=9, color="#B2BEB5", font="Karla"
+        fontsize=9, color="#B2BEB5", font="Arial"
     )
     map_title = f"{event_type_correct_name} Map"
 
@@ -290,14 +290,14 @@ if create_plot_button:
         x=0.24, y=.56,
         s=map_title,
         va="bottom", ha="center",
-        fontsize=12, color="white", font="DM Sans", weight="bold"
+        fontsize=12, color="white", font="Arial", weight="bold"
     )
 
     fig_text(
         x=0.225, y=.149,
         s="Created by @kmicha03",
         va="bottom", ha="left",
-        fontsize=10, color="white", font="Karla"
+        fontsize=10, color="white", font="Arial"
     )
 
 
