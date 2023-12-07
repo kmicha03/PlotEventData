@@ -3,6 +3,6 @@ matplotlib
 numpy
 pandas
 seaborn
-psycopg2
+psycopg2-binary
 mplsoccer
 
