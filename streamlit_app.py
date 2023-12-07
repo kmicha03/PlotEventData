@@ -305,7 +305,7 @@ if create_plot_button:
     pitch_ax1.draw(ax=ax1)
 
     # Load the image
-    image_path = f"/Users/konstantinosmichail/Club Logos/{selected_team}_logo.png"
+    image_path = f"/Club Logos/{selected_team}_logo.png"
     image = plt.imread(image_path)
 
     imagebox = OffsetImage(image, zoom=0.15, resample=True, alpha=0.6)
