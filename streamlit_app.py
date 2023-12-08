@@ -369,27 +369,27 @@ st.pyplot(fig)
 
 with st.expander('Events Manual'):
     st.write('''
-      Pass: A normal pass in open play
-      Dribble: Player carries the ball at least 3 meters
-      Clearance: Action by a defending player that temporarily removes the attacking threat on their goal/that effectively alleviates pressure on their goal
-      Interception: Preventing an opponent's pass from reaching their teammates
-      Bad Touch: When a player mis-controls the ball with a poor touch and loses the ball
-      Take On: Attempt to dribble past opponent
-      Foul: Any infringement penalised as foul play by a referee that results in a free-kick or penalty event
-      Tackle: Tackle on the ball
-      Cross: A cross into the box
-      Shot: Shot attempt not from penalty or free-kick
-      Throw-in: A throw-in from a player
-      Freekick Short: Short free-kick
-      Freekick Crossed: Free kick crossed into the box
-      Shot Freekick: Direct free-kick on goal
-      Goalkick: Goal kick
-      Corner Crossed: Corner crossed into the box
-      Corner Short: Short corner 
-      Penalty Shot: Penalty shot
-      Keeper Pick Up: Keeper picks up the ball
-      Keeper Save: Keeper saves a shot on goal
-      Keeper Punch: Keeper punches the ball clear
-      Keeper Claim: Keeper catches a cross                   
+      1. Pass: A normal pass in open play
+      2. Dribble: Player carries the ball at least 3 meters
+      3. Clearance: Action by a defending player that temporarily removes the attacking threat on their goal/that effectively alleviates pressure on their goal
+      4. Interception: Preventing an opponent's pass from reaching their teammates
+      5. Bad Touch: When a player mis-controls the ball with a poor touch and loses the ball
+      6. Take On: Attempt to dribble past opponent
+      7. Foul: Any infringement penalised as foul play by a referee that results in a free-kick or penalty event
+      8. Tackle: Tackle on the ball
+      9. Cross: A cross into the box
+      10. Shot: Shot attempt not from penalty or free-kick
+      11. Throw-in: A throw-in from a player
+      12. Freekick Short: Short free-kick
+      13. Freekick Crossed: Free kick crossed into the box
+      14. Shot Freekick: Direct free-kick on goal
+      15. Goalkick: Goal kick
+      16. Corner Crossed: Corner crossed into the box
+      17. Corner Short: Short corner 
+      18. Penalty Shot: Penalty shot
+      19. Keeper Pick Up: Keeper picks up the ball
+      20. Keeper Save: Keeper saves a shot on goal
+      21. Keeper Punch: Keeper punches the ball clear
+      22. Keeper Claim: Keeper catches a cross                   
     ''')
 
