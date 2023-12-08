@@ -265,7 +265,7 @@ if create_plot_button:
     )
 
     # Create subplots
-    fig, ax = plt.subplots(figsize=(20, 12))
+    fig, ax = plt.subplots(figsize=(10, 10))
     ax1 = plt.subplot2grid(shape=(6, 6), loc=(1, 0), rowspan=3, colspan=1) 
     
     fig.set_facecolor('#12130e')
