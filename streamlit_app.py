@@ -19,7 +19,7 @@ from PIL import Image
 import streamlit as st
 import types
 import psycopg2
-from mplsoccer import Pitch, VerticalPitch, FontManager
+from mplsoccer import Pitch, VerticalPitch, FontManager, add_image
 from matplotlib import rcParams
 
 import matplotlib.ticker as ticker
