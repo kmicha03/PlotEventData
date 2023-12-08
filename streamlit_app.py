@@ -369,26 +369,27 @@ st.pyplot(fig)
 
 with st.expander('Events Manual'):
     st.write('''
-      Pass
-      Keeper Pick Up
-      Keeper Save
-      Keeper Punch
-      Keeper Claim
-      Freekick Short
-      Goalkick
-      Dribble
-      Clearance
-      Throw-in
-      Interception
-      Bad Touch
-      Take On
-      Foul
-      Tackle       
-      Cross
-      Shot
-      Corner Crossed
-      Freekick Crossed
-      Shot Freekick
-      Corner Short                    
+      Pass: A normal pass in open play
+      Dribble: Player carries the ball at least 3 meters
+      Clearance: Action by a defending player that temporarily removes the attacking threat on their goal/that effectively alleviates pressure on their goal
+      Interception: Preventing an opponent's pass from reaching their teammates
+      Bad Touch: When a player mis-controls the ball with a poor touch and loses the ball
+      Take On: Attempt to dribble past opponent
+      Foul: Any infringement penalised as foul play by a referee that results in a free-kick or penalty event
+      Tackle: Tackle on the ball
+      Cross: A cross into the box
+      Shot: Shot attempt not from penalty or free-kick
+      Throw-in: A throw-in from a player
+      Freekick Short: Short free-kick
+      Freekick Crossed: Free kick crossed into the box
+      Shot Freekick: Direct free-kick on goal
+      Goalkick: Goal kick
+      Corner Crossed: Corner crossed into the box
+      Corner Short: Short corner 
+      Penalty Shot: Penalty shot
+      Keeper Pick Up: Keeper picks up the ball
+      Keeper Save: Keeper saves a shot on goal
+      Keeper Punch: Keeper punches the ball clear
+      Keeper Claim: Keeper catches a cross                   
     ''')
 
