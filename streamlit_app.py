@@ -230,12 +230,18 @@ if len(selected_match_ids)>0:
   events_df = get_player_events(selected_player, selected_match_ids)
 
   unique_type_names = events_df['type_name'].unique().tolist()
+  # Generate human-readable names for the event types
+  unique_type_names_readable = [name.replace('_', ' ').title() for name in unique_type_names]
+
+  # Create a mapping from the readable names back to the original technical names
+  type_name_mapping = dict(zip(unique_type_names_readable, unique_type_names))
 
   if 'GK' not in selected_positions:
     # Filter out event types starting with "keeper"
     unique_type_names = [event for event in unique_type_names if not event.startswith('keeper')]
 
-  selected_type_name = st.sidebar.selectbox("Select an Event Type", unique_type_names)
+  selected_type_name_readable = st.sidebar.selectbox("Select an Event Type", unique_type_names_readable)
+  selected_type_name = type_name_mapping[selected_type_name_readable]
 
 event_results = events_df[events_df["type_name"] == selected_type_name]['result_name'].unique().tolist()
 
