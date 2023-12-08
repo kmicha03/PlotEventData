@@ -264,51 +264,30 @@ if create_plot_button:
         pitch_width=68 
     )
 
-    # Create subplots
-    fig, ax = plt.subplots(figsize=(14, 10))
-    ax1 = plt.subplot2grid(shape=(10, 8), loc=(1, 0), rowspan=3, colspan=1) 
+    #robotto_regular = FontManager()
+
+    fig, axs = pitch.grid(endnote_height=0.03, endnote_space=0,
+                      title_height=0.08, title_space=0,
+                      # Turn off the endnote/title axis. I usually do this after
+                      # I am happy with the chart layout and text placement
+                      axis=False,
+                      grid_height=0.84)
+
+    # endnote and title
+    axs['endnote'].text(1, 0.5, '@your_twitter_handle', va='center', ha='right', fontsize=15,color='#dee6ea')
+    axs['title'].text(0.5, 0.5, "Pressure applied by\n Chelsea FC Women", color='#dee6ea',
+                      va='center', ha='center',fontsize=25)
     
+    #robotto_regular = FontManager()
+
     fig.set_facecolor('#12130e')
-
-    fig_text(
-        x=0.13, y=.60,
-        s=plot_title,
-        va="bottom", ha="left",
-        fontsize=12, color="white", weight="bold"
-    )
-    fig_text(
-        x=0.13, y=.585,
-        s=plot_title2,
-        va="bottom", ha="left",
-        fontsize=9, color="#B2BEB5"
-    )
-    map_title = f"{event_type_correct_name} Map"
-
-    fig_text(
-        x=0.24, y=.56,
-        s=map_title,
-        va="bottom", ha="center",
-        fontsize=12, color="white", weight="bold"
-    )
-
-    fig_text(
-        x=0.225, y=.149,
-        s="Created by @kmicha03",
-        va="bottom", ha="left",
-        fontsize=10, color="white"
-    )
-
-
-    pitch_ax1 = VerticalPitch(pitch_type='custom', pitch_color='#12130e', line_color='#B2BEB5', half=False,pitch_length=105, pitch_width=68 )
-    pitch_ax1.draw(ax=ax1)
 
     # Load the image
     image_path = f"Club Logos/{selected_team}_logo.png"
     image = plt.imread(image_path)
 
-    imagebox = OffsetImage(image, zoom=0.15, resample=True, alpha=0.6)
-    ab = AnnotationBbox(imagebox, (0.5, 0.7), frameon=False, boxcoords="axes fraction", pad=0.0)
-    ax1.add_artist(ab)
+    ax_image = add_image(image, fig, left=0.4, bottom=0.55, width=0.2,
+                     alpha=0.6, interpolation='hanning')
 
     filtered_events = events_df[(events_df['type_name'] == selected_type_name) & (events_df['result_name'].isin(event_result))]
     mask_complete = filtered_events.result_name.isin(["success"])
@@ -322,61 +301,62 @@ if create_plot_button:
         | (selected_type_name == 'corner_short') | (selected_type_name == 'shot_freekick') | (selected_type_name == 'shot_corner') | (selected_type_name == 'goalkick')):
             
       # Plot the completed passes
-      pitch_ax1.lines(filtered_events[mask_complete].start_x, filtered_events[mask_complete].start_y,
+      pitch.lines(filtered_events[mask_complete].start_x, filtered_events[mask_complete].start_y,
                           filtered_events[mask_complete].end_x, filtered_events[mask_complete].end_y,
                           lw=3, transparent=True, comet=True, label=f'Successful {event_type_correct_name}',
-                          color=colour_success, ax=ax1)
+                          color=colour_success, ax=axs['pitch'])
 
         # Plot the other passes
-      pitch_ax1.lines(filtered_events[~mask_complete].start_x, filtered_events[~mask_complete].start_y,
+      pitch.lines(filtered_events[~mask_complete].start_x, filtered_events[~mask_complete].start_y,
                           filtered_events[~mask_complete].end_x, filtered_events[~mask_complete].end_y,
                           lw=3, transparent=True, comet=True, label=f'Unsuccessful {event_type_correct_name}',
-                          color=colour_fail, ax=ax1,alpha=0.7)
+                          color=colour_fail, ax=axs['pitch'],alpha=0.7)
       
-      pitch_ax1.scatter(filtered_events[mask_complete].end_x, filtered_events[mask_complete].end_y,
-                      ax=ax1, color=colour_success, s=15)
+      pitch.scatter(filtered_events[mask_complete].end_x, filtered_events[mask_complete].end_y,
+                      ax=axs['pitch'], color=colour_success, s=15)
       
-      pitch_ax1.scatter(filtered_events[~mask_complete].end_x, filtered_events[~mask_complete].end_y,
-                      ax=ax1, color=colour_fail,s=15)
+      pitch.scatter(filtered_events[~mask_complete].end_x, filtered_events[~mask_complete].end_y,
+                      ax=axs['pitch'], color=colour_fail,s=15)
         
           
     elif ((selected_type_name == 'dribble')):
 
-      pitch_ax1.lines(filtered_events[mask_complete].start_x, filtered_events[mask_complete].start_y,
+      pitch.lines(filtered_events[mask_complete].start_x, filtered_events[mask_complete].start_y,
                           filtered_events[mask_complete].end_x, filtered_events[mask_complete].end_y,
                           lw=3, transparent=True, comet=True, label=f'Successful {event_type_correct_name}',
-                          color=colour_success, ax=ax1)
-      pitch_ax1.lines(filtered_events[~mask_complete].start_x, filtered_events[~mask_complete].start_y,
+                          color=colour_success, ax=axs['pitch'])
+      pitch.lines(filtered_events[~mask_complete].start_x, filtered_events[~mask_complete].start_y,
                           filtered_events[~mask_complete].end_x, filtered_events[~mask_complete].end_y,
                           lw=3, transparent=True, comet=True, label=f'Unsuccessful {event_type_correct_name}',
-                          color=colour_fail, ax=ax1,alpha=0.7)
+                          color=colour_fail, ax=axs['pitch'],alpha=0.7)
       
-      pitch_ax1.scatter(filtered_events[mask_complete].end_x, filtered_events[mask_complete].end_y,
-                      ax=ax1, color=colour_success, s=15)
+      pitch.scatter(filtered_events[mask_complete].end_x, filtered_events[mask_complete].end_y,
+                      ax=axs['pitch'], color=colour_success, s=15)
       
-      pitch_ax1.scatter(filtered_events[~mask_complete].end_x, filtered_events[~mask_complete].end_y,
-                      ax=ax1, color=colour_fail,s=15)
+      pitch.scatter(filtered_events[~mask_complete].end_x, filtered_events[~mask_complete].end_y,
+                      ax=axs['pitch'], color=colour_fail,s=15)
           
     elif ((selected_type_name == 'take_on') | (selected_type_name == 'keeper_claim')):
 
-      pitch_ax1.scatter(filtered_events[mask_complete].start_x, filtered_events[mask_complete].start_y,
-                      ax=ax1, color=colour_success,s=15, label=f"Successful {event_type_correct_name}")
-      pitch_ax1.scatter(filtered_events[~mask_complete].start_x, filtered_events[~mask_complete].start_y,
-                      ax=ax1, color=colour_fail,s=15, label = f"Unsuccessful {event_type_correct_name}")
+      pitch.scatter(filtered_events[mask_complete].start_x, filtered_events[mask_complete].start_y,
+                      ax=axs['pitch'], color=colour_success,s=15, label=f"Successful {event_type_correct_name}")
+      pitch.scatter(filtered_events[~mask_complete].start_x, filtered_events[~mask_complete].start_y,
+                      ax=axs['pitch'], color=colour_fail,s=15, label = f"Unsuccessful {event_type_correct_name}")
           
     elif ((selected_type_name == 'interception') | (selected_type_name == 'clearance') | (selected_type_name == 'tackle') 
           | (selected_type_name == 'keeper_pick_up') | (selected_type_name == 'keeper_save') | (selected_type_name == 'keeper_punch')):
 
-      pitch_ax1.scatter(filtered_events[mask_complete].start_x, filtered_events[mask_complete].start_y,
-                      ax=ax1, color=colour_success, s=15, label = f"Successful {event_type_correct_name}")
+      pitch.scatter(filtered_events[mask_complete].start_x, filtered_events[mask_complete].start_y,
+                      ax=axs['pitch'], color=colour_success, s=15, label = f"Successful {event_type_correct_name}")
       
     elif ((selected_type_name == 'bad_touch') | (selected_type_name == 'foul')):
 
-      pitch_ax1.scatter(filtered_events[mask_complete].start_x, filtered_events[mask_complete].start_y,
-                      ax=ax1, color=colour_fail, s=15, label = f"{event_type_correct_name}")
+      pitch.scatter(filtered_events[mask_complete].start_x, filtered_events[mask_complete].start_y,
+                      ax=axs['pitch'], color=colour_fail, s=15, label = f"{event_type_correct_name}")
     # Display the plot in Streamlit
-    legend = ax1.legend(facecolor='#B2BEB5', edgecolor='None', fontsize=7, loc='upper left', handlelength=1)
+    legend = axs['pitch'].legend(facecolor='#B2BEB5', edgecolor='None', fontsize=7, loc='upper left', handlelength=1)
     for text in legend.get_texts():
       text.set_color('#FFFFFF')
 
     st.pyplot(fig)
+
