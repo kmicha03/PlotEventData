@@ -367,3 +367,28 @@ for text in legend.get_texts():
 
 st.pyplot(fig)
 
+with st.expander('Events Manual'):
+    st.write('''
+      Pass
+      Keeper Pick Up
+      Keeper Save
+      Keeper Punch
+      Keeper Claim
+      Freekick Short
+      Goalkick
+      Dribble
+      Clearance
+      Throw-in
+      Interception
+      Bad Touch
+      Take On
+      Foul
+      Tackle       
+      Cross
+      Shot
+      Corner Crossed
+      Freekick Crossed
+      Shot Freekick
+      Corner Short                    
+    ''')
+
