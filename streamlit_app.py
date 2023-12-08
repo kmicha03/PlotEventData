@@ -1,11 +1,3 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Created on Tue Nov 28 17:10:03 2023
-
-@author: konstantinosmichail
-"""
-
 from highlight_text.htext import AnnotationBbox
 from matplotlib.offsetbox import OffsetImage
 import numpy as np
@@ -32,9 +24,6 @@ from matplotlib.colors import LinearSegmentedColormap, Normalize
 from matplotlib import cm
 import matplotlib.gridspec as gridspec
 from matplotlib.font_manager import FontProperties
-
-
-from mplsoccer import VerticalPitch
 
 supabase_password = st.secrets["db_password"]
 project_url = st.secrets["db_project_url"]
@@ -278,7 +267,6 @@ fig, axs = pitch.grid(endnote_height=0.03, endnote_space=0,
 # endnote and title
 axs['endnote'].text(1, 0.5, '@kmicha03', va='center', ha='right', fontsize=15,color='#dee6ea')
 
-# Assuming 'axs' is a dictionary of axes, if 'title' is an axis dedicated for the title, use it like this:
 axs['title'].text(0.5, 0.9, plot_title, color='#dee6ea', va='center', ha='center', fontsize=20, weight='bold')
 axs['title'].text(0.5, 0.575, plot_title2, color='#dee6ea', va='center', ha='center', fontsize=17)
 
