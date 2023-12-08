@@ -268,8 +268,6 @@ if create_plot_button:
     fig, ax = plt.subplots(figsize=(18, 12))
     ax1 = plt.subplot2grid(shape=(3, 3), loc=(1, 0), rowspan=3, colspan=1) 
     
-    robotto_regular = FontManager()
-
     fig.set_facecolor('#12130e')
 
     fig_text(
