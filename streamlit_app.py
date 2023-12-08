@@ -144,6 +144,19 @@ def load_matches(selected_player, selected_positions):
 
 # App title
 st.title("Football Analytics - Event Data")
+st.subheader('Created by Konstantinos Michail (@kmicha03)\nData from Opta')
+
+
+with st.expander('Instructions'):
+    st.write('''
+      1) Choose Your League: Begin by selecting from our list of available leagues.
+      2) Pick Your Team: Next, identify and select the team you are interested in.
+      3) Select a Player: Choose a player from your chosen team to focus on.
+      4) Filter by Position: Refine your search by selecting the player's position. This will tailor the events to that specific role.
+      5) Match Selection: By default, all matches are selected. You can customize this by adding or removing matches from your analysis.
+      6) Event Type Selection: Choose the type of event you're interested in exploring further.
+      7) Result Filtering: Lastly, narrow down your results by filtering through the different outcomes of the selected event.
+    ''')
 
 st.sidebar.header('Filters')
 selected_league = st.sidebar.selectbox("Select a League", available_leagues)
