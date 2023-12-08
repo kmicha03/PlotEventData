@@ -283,7 +283,7 @@ axs['pitch'].set_title(f"{event_type_correct_name} Map", color='white', va='cent
 fig.set_facecolor('#12130e')
 
 # Load the image
-image_path = f"/Users/konstantinosmichail/Club Logos/{selected_team}_logo.png"
+image_path = f"Club Logos/{selected_team}_logo.png"
 image = plt.imread(image_path)
 
 ax_image = add_image(image, fig, left=0.4, bottom=0.55, width=0.2,
