@@ -274,8 +274,8 @@ if create_plot_button:
                       grid_height=0.84)
 
     # endnote and title
-    axs['endnote'].text(1, 0.5, '@your_twitter_handle', va='center', ha='right', fontsize=15,color='#dee6ea')
-    axs['title'].text(0.5, 0.5, "Pressure applied by\n Chelsea FC Women", color='#dee6ea',
+    axs['endnote'].text(1, 0.5, '@kmicha03', va='center', ha='right', fontsize=15,color='#dee6ea')
+    axs['title'].text(0.5, 0.5, f"{plot_title} \n {plot_title2}", color='#dee6ea',
                       va='center', ha='center',fontsize=25)
     
     #robotto_regular = FontManager()
