@@ -310,13 +310,13 @@ if ((selected_type_name == 'throw_in') | (selected_type_name == 'cross') | (sele
   # Plot the completed passes
   pitch.lines(filtered_events[mask_complete].start_x, filtered_events[mask_complete].start_y,
                       filtered_events[mask_complete].end_x, filtered_events[mask_complete].end_y,
-                      lw=3, transparent=True, comet=True, label=f'Successful {event_type_correct_name}',
+                      lw=2, transparent=True, comet=True, label=f'Successful {event_type_correct_name}',
                       color=colour_success, ax=axs['pitch'])
 
     # Plot the other passes
   pitch.lines(filtered_events[~mask_complete].start_x, filtered_events[~mask_complete].start_y,
                       filtered_events[~mask_complete].end_x, filtered_events[~mask_complete].end_y,
-                      lw=3, transparent=True, comet=True, label=f'Unsuccessful {event_type_correct_name}',
+                      lw=2, transparent=True, comet=True, label=f'Unsuccessful {event_type_correct_name}',
                       color=colour_fail, ax=axs['pitch'],alpha=0.7)
   
   pitch.scatter(filtered_events[mask_complete].end_x, filtered_events[mask_complete].end_y,
