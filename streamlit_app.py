@@ -45,7 +45,8 @@ def get_available_leagues():
               name,id
             from
               "leagues"
-            
+            where
+                active=1
         """)
 
     result = cursor.fetchall()
