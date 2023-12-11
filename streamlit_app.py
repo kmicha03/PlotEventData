@@ -280,8 +280,9 @@ if len(selected_match_ids)>0:
     # endnote and title
   axs['endnote'].text(1, 0.5, '@kmicha03', va='center', ha='right', fontsize=15,color='#dee6ea')
     
-  axs['title'].text(0.5, 0.9, plot_title, color='#dee6ea', va='center', ha='center', fontsize=20, weight='bold')
-  axs['title'].text(0.5, 0.575, plot_title2, color='#dee6ea', va='center', ha='center', fontsize=17)
+  # Assuming 'axs' is a dictionary of axes, if 'title' is an axis dedicated for the title, use it like this:
+  axs['title'].text(0, 0.9, plot_title, color='#dee6ea', va='center', ha='left', fontsize=20, weight='bold')
+  axs['title'].text(0, 0.575, plot_title2, color='#dee6ea', va='center', ha='left', fontsize=17)
     
   axs['pitch'].set_title(f"{event_type_correct_name} Map", color='white', va='center', ha='center', fontsize=18, weight='bold')
     
@@ -293,8 +294,8 @@ if len(selected_match_ids)>0:
   image_path = f"Club Logos/{selected_team}_logo.png"
   image = plt.imread(image_path)
     
-  ax_image = add_image(image, fig, left=0.4, bottom=0.55, width=0.2,
-                      alpha=0.6, interpolation='hanning')
+  ax_image = add_image(image, fig, left=0.9, bottom=0.89, width=0.12,
+                interpolation='hanning')
     
   filtered_events = events_df[(events_df['type_name'] == selected_type_name) & (events_df['result_name'].isin(event_result))]
   mask_complete = filtered_events.result_name.isin(["success"])
