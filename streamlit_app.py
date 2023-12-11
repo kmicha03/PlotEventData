@@ -245,20 +245,20 @@ if len(selected_match_ids)>0:
   selected_type_name_readable = st.sidebar.selectbox("Select an Event Type", unique_type_names_readable)
   selected_type_name = type_name_mapping[selected_type_name_readable]
 
-    event_results = events_df[events_df["type_name"] == selected_type_name]['result_name'].unique().tolist()
+  event_results = events_df[events_df["type_name"] == selected_type_name]['result_name'].unique().tolist()
     
-    event_result = st.sidebar.multiselect("Select Result Type", event_results, event_results)
+  event_result = st.sidebar.multiselect("Select Result Type", event_results, event_results)
     
-    minutes_played = player_minutes_df[player_minutes_df["player_name"] == selected_player]["minutes_played"].iloc[0]
-    event_type_correct_name = selected_type_name.replace('_', ' ').title()
-    selected_positions_correct_name = ','.join(selected_positions)
+  minutes_played = player_minutes_df[player_minutes_df["player_name"] == selected_player]["minutes_played"].iloc[0]
+  event_type_correct_name = selected_type_name.replace('_', ' ').title()
+  selected_positions_correct_name = ','.join(selected_positions)
     # Create a dynamic title
-    plot_title = f"{selected_player} ({selected_positions_correct_name}) - {selected_team}"
-    plot_title2 = f"{minutes_played} Minutes Played - 2023/24"
+  plot_title = f"{selected_player} ({selected_positions_correct_name}) - {selected_team}"
+  plot_title2 = f"{minutes_played} Minutes Played - 2023/24"
     #st.title(plot_title)
     
     # Create and customize the plot
-    pitch = VerticalPitch(
+  pitch = VerticalPitch(
         pitch_type='custom',
         goal_type='box',
         linewidth=1.25,
@@ -270,7 +270,7 @@ if len(selected_match_ids)>0:
     
     #robotto_regular = FontManager()
     
-    fig, axs = pitch.grid(endnote_height=0.03, endnote_space=0,
+  fig, axs = pitch.grid(endnote_height=0.03, endnote_space=0,
                       title_height=0.08, title_space=0,
                       # Turn off the endnote/title axis. I usually do this after
                       # I am happy with the chart layout and text placement
@@ -278,32 +278,32 @@ if len(selected_match_ids)>0:
                       grid_height=0.84)
     
     # endnote and title
-    axs['endnote'].text(1, 0.5, '@kmicha03', va='center', ha='right', fontsize=15,color='#dee6ea')
+  axs['endnote'].text(1, 0.5, '@kmicha03', va='center', ha='right', fontsize=15,color='#dee6ea')
     
-    axs['title'].text(0.5, 0.9, plot_title, color='#dee6ea', va='center', ha='center', fontsize=20, weight='bold')
-    axs['title'].text(0.5, 0.575, plot_title2, color='#dee6ea', va='center', ha='center', fontsize=17)
+  axs['title'].text(0.5, 0.9, plot_title, color='#dee6ea', va='center', ha='center', fontsize=20, weight='bold')
+  axs['title'].text(0.5, 0.575, plot_title2, color='#dee6ea', va='center', ha='center', fontsize=17)
     
-    axs['pitch'].set_title(f"{event_type_correct_name} Map", color='white', va='center', ha='center', fontsize=18, weight='bold')
+  axs['pitch'].set_title(f"{event_type_correct_name} Map", color='white', va='center', ha='center', fontsize=18, weight='bold')
     
     #robotto_regular = FontManager()
     
-    fig.set_facecolor('#12130e')
+  fig.set_facecolor('#12130e')
     
     # Load the image
-    image_path = f"Club Logos/{selected_team}_logo.png"
-    image = plt.imread(image_path)
+  image_path = f"Club Logos/{selected_team}_logo.png"
+  image = plt.imread(image_path)
     
-    ax_image = add_image(image, fig, left=0.4, bottom=0.55, width=0.2,
+  ax_image = add_image(image, fig, left=0.4, bottom=0.55, width=0.2,
                       alpha=0.6, interpolation='hanning')
     
-    filtered_events = events_df[(events_df['type_name'] == selected_type_name) & (events_df['result_name'].isin(event_result))]
-    mask_complete = filtered_events.result_name.isin(["success"])
+  filtered_events = events_df[(events_df['type_name'] == selected_type_name) & (events_df['result_name'].isin(event_result))]
+  mask_complete = filtered_events.result_name.isin(["success"])
     
-    colour_success = '#0BDA51'
-    colour_fail = '#BA4F45'
+  colour_success = '#0BDA51'
+  colour_fail = '#BA4F45'
     
           # Filter the DataFrame based on the selected event type
-    if ((selected_type_name == 'throw_in') | (selected_type_name == 'cross') | (selected_type_name == 'pass') | (selected_type_name == 'shot') 
+  if ((selected_type_name == 'throw_in') | (selected_type_name == 'cross') | (selected_type_name == 'pass') | (selected_type_name == 'shot') 
         | (selected_type_name == 'freekick_short') | (selected_type_name == 'corner_crossed') | (selected_type_name == 'freekick_crossed') 
         | (selected_type_name == 'corner_short') | (selected_type_name == 'shot_freekick') | (selected_type_name == 'shot_corner') | (selected_type_name == 'goalkick')):
             
@@ -326,7 +326,7 @@ if len(selected_match_ids)>0:
                       ax=axs['pitch'], color=colour_fail,s=15)
         
           
-    elif ((selected_type_name == 'dribble')):
+  elif ((selected_type_name == 'dribble')):
     
       pitch.lines(filtered_events[mask_complete].start_x, filtered_events[mask_complete].start_y,
                           filtered_events[mask_complete].end_x, filtered_events[mask_complete].end_y,
@@ -343,29 +343,29 @@ if len(selected_match_ids)>0:
       pitch.scatter(filtered_events[~mask_complete].end_x, filtered_events[~mask_complete].end_y,
                       ax=axs['pitch'], color=colour_fail,s=15)
           
-    elif ((selected_type_name == 'take_on') | (selected_type_name == 'keeper_claim')):
+  elif ((selected_type_name == 'take_on') | (selected_type_name == 'keeper_claim')):
     
       pitch.scatter(filtered_events[mask_complete].start_x, filtered_events[mask_complete].start_y,
                       ax=axs['pitch'], color=colour_success,s=15, label=f"Successful {event_type_correct_name}")
       pitch.scatter(filtered_events[~mask_complete].start_x, filtered_events[~mask_complete].start_y,
                       ax=axs['pitch'], color=colour_fail,s=15, label = f"Unsuccessful {event_type_correct_name}")
           
-    elif ((selected_type_name == 'interception') | (selected_type_name == 'clearance') | (selected_type_name == 'tackle') 
+  elif ((selected_type_name == 'interception') | (selected_type_name == 'clearance') | (selected_type_name == 'tackle') 
           | (selected_type_name == 'keeper_pick_up') | (selected_type_name == 'keeper_save') | (selected_type_name == 'keeper_punch')):
     
       pitch.scatter(filtered_events[mask_complete].start_x, filtered_events[mask_complete].start_y,
                       ax=axs['pitch'], color=colour_success, s=15, label = f"Successful {event_type_correct_name}")
       
-    elif ((selected_type_name == 'bad_touch') | (selected_type_name == 'foul')):
+  elif ((selected_type_name == 'bad_touch') | (selected_type_name == 'foul')):
     
       pitch.scatter(filtered_events[mask_complete].start_x, filtered_events[mask_complete].start_y,
                       ax=axs['pitch'], color=colour_fail, s=15, label = f"{event_type_correct_name}")
     # Display the plot in Streamlit
-    legend = axs['pitch'].legend(facecolor='#B2BEB5', edgecolor='None', fontsize=7, loc='upper left', handlelength=1)
-    for text in legend.get_texts():
+  legend = axs['pitch'].legend(facecolor='#B2BEB5', edgecolor='None', fontsize=7, loc='upper left', handlelength=1)
+  for text in legend.get_texts():
       text.set_color('#FFFFFF')
     
-    st.pyplot(fig)
+  st.pyplot(fig)
 
 with st.expander('Events Manual'):
     st.write('''
