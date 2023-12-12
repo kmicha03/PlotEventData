@@ -19,7 +19,7 @@ Welcome to the Football Event Data Streamlit App! This interactive web applicati
 - Super Lig
 - Scottish Premiership
 - Jupiler Pro League
-- 2. Bundesliga
+- 2.Bundesliga
 
 ## Features
 
