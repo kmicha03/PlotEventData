@@ -46,7 +46,7 @@ def get_available_leagues():
             from
               "leagues"
             where
-                active=1
+               active=1
         """)
 
     result = cursor.fetchall()
