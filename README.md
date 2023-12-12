@@ -24,7 +24,7 @@ Welcome to the Football Event Data Streamlit App! This interactive web applicati
 ## Features
 
 - Select a league of your choice from the dropdown menu.
-- Choose specific teams and seasons for analysis.
+- Choose specific players for analysis.
 - Visualize event data on interactive plots and graphs.
 - Gain insights into player actions, goals, fouls, and more.
 - Explore trends and patterns in football events.
