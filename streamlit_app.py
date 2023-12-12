@@ -307,7 +307,8 @@ if len(selected_match_ids)>0:
           # Filter the DataFrame based on the selected event type
   if ((selected_type_name == 'throw_in') | (selected_type_name == 'cross') | (selected_type_name == 'pass') | (selected_type_name == 'shot') 
         | (selected_type_name == 'freekick_short') | (selected_type_name == 'corner_crossed') | (selected_type_name == 'freekick_crossed') 
-        | (selected_type_name == 'corner_short') | (selected_type_name == 'shot_freekick') | (selected_type_name == 'shot_corner') | (selected_type_name == 'goalkick')):
+        | (selected_type_name == 'corner_short') | (selected_type_name == 'shot_freekick') | (selected_type_name == 'shot_corner') | (selected_type_name == 'goalkick')
+         | (selected_type_name == 'shot_penalty')):
             
       # Plot the completed passes
       pitch.lines(filtered_events[mask_complete].start_x, filtered_events[mask_complete].start_y,
