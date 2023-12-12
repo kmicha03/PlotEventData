@@ -43,6 +43,10 @@ Welcome to the Football Event Data Streamlit App! This interactive web applicati
 
 I would like to express my gratitude to McKay Johns for his workshop, Ben Griffis for inspirations and everyone who contributed with their opinion or designing skills.
 
+## Requests
+
+I'm genuinely eager to hear your thoughts, suggestions, and requests. If you have ideas for new metrics based on our existing data or innovative ways to enhance this tool, please don't hesitate to get in touch. Your feedback is highly valued and appreciated!
+
 ## Contact
 
 If you have any questions, suggestions, or feedback, please feel free to contact me at [constantinos.michail@outlook.com](mailto:constantinos.michail@outlook.com) or reach out to me on Twitter [@kmicha03](https://twitter.com/kmicha03).
