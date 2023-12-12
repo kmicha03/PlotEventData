@@ -360,7 +360,7 @@ if len(selected_match_ids)>0:
       
   elif ((selected_type_name == 'bad_touch') | (selected_type_name == 'foul')):
     
-      pitch.scatter(filtered_events[mask_complete].start_x, filtered_events[mask_complete].start_y,
+      pitch.scatter(filtered_events[~mask_complete].start_x, filtered_events[~mask_complete].start_y,
                       ax=axs['pitch'], color=colour_fail, s=15, label = f"{event_type_correct_name}")
     # Display the plot in Streamlit
   legend = axs['pitch'].legend(facecolor='#B2BEB5', edgecolor='None', fontsize=7, loc='upper left', handlelength=1)
