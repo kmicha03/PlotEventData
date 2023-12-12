@@ -51,5 +51,3 @@ I'm genuinely eager to hear your thoughts, suggestions, and requests. If you hav
 
 If you have any questions, suggestions, or feedback, please feel free to contact me at [constantinos.michail@outlook.com](mailto:constantinos.michail@outlook.com) or reach out to me on Twitter [@kmicha03](https://twitter.com/kmicha03).
 
-Enjoy exploring football events data with the Football Event Data Streamlit App!
-
