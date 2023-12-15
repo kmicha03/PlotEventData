@@ -306,68 +306,186 @@ if len(selected_match_ids)>0:
     
           # Filter the DataFrame based on the selected event type
   if ((selected_type_name == 'throw_in') | (selected_type_name == 'cross') | (selected_type_name == 'pass') | (selected_type_name == 'shot') 
-        | (selected_type_name == 'freekick_short') | (selected_type_name == 'corner_crossed') | (selected_type_name == 'freekick_crossed') 
-        | (selected_type_name == 'corner_short') | (selected_type_name == 'shot_freekick') | (selected_type_name == 'shot_corner') | (selected_type_name == 'goalkick')
-         | (selected_type_name == 'shot_penalty')):
-            
-      # Plot the completed passes
-      pitch.lines(filtered_events[mask_complete].start_x, filtered_events[mask_complete].start_y,
-                          filtered_events[mask_complete].end_x, filtered_events[mask_complete].end_y,
-                          lw=2.5, transparent=True, comet=True, label=f'Successful {event_type_correct_name}',
-                          color=colour_success, ax=axs['pitch'])
+      | (selected_type_name == 'freekick_short') | (selected_type_name == 'corner_crossed') | (selected_type_name == 'freekick_crossed') 
+      | (selected_type_name == 'corner_short') | (selected_type_name == 'shot_freekick') | (selected_type_name == 'shot_corner') | (selected_type_name == 'goalkick')):
+          
+    filtered_events = events_df[(events_df['type_name'] == selected_type_name) & (events_df['result_name'].isin(event_result))]
+    mask_complete = filtered_events.result_name.isin(["success"])
+    # Plot the completed passes
+    pitch.lines(filtered_events[mask_complete].start_x, filtered_events[mask_complete].start_y,
+                        filtered_events[mask_complete].end_x, filtered_events[mask_complete].end_y,
+                        lw=3, transparent=True, comet=True, label=f'Successful {event_type_correct_name}',
+                        color=colour_success, ax=axs['pitch'])
+
+      # Plot the other passes
+    pitch.lines(filtered_events[~mask_complete].start_x, filtered_events[~mask_complete].start_y,
+                        filtered_events[~mask_complete].end_x, filtered_events[~mask_complete].end_y,
+                        lw=3, transparent=True, comet=True, label=f'Unsuccessful {event_type_correct_name}',
+                        color=colour_fail, ax=axs['pitch'],alpha=0.7)
     
-        # Plot the other passes
-      pitch.lines(filtered_events[~mask_complete].start_x, filtered_events[~mask_complete].start_y,
-                          filtered_events[~mask_complete].end_x, filtered_events[~mask_complete].end_y,
-                          lw=2.5, transparent=True, comet=True, label=f'Unsuccessful {event_type_correct_name}',
-                          color=colour_fail, ax=axs['pitch'],alpha=0.7)
+    pitch.scatter(filtered_events[mask_complete].end_x, filtered_events[mask_complete].end_y,
+                    ax=axs['pitch'], color=colour_success, s=15)
+    
+    pitch.scatter(filtered_events[~mask_complete].end_x, filtered_events[~mask_complete].end_y,
+                    ax=axs['pitch'], color=colour_fail,s=15)
       
-      pitch.scatter(filtered_events[mask_complete].end_x, filtered_events[mask_complete].end_y,
-                      ax=axs['pitch'], color=colour_success, s=15)
-      
-      pitch.scatter(filtered_events[~mask_complete].end_x, filtered_events[~mask_complete].end_y,
-                      ax=axs['pitch'], color=colour_fail,s=15)
         
-          
   elif ((selected_type_name == 'dribble')):
+
+    filtered_events = events_df[(events_df['type_name'] == selected_type_name) & (events_df['result_name'].isin(event_result))]
+    mask_complete = filtered_events.result_name.isin(["success"])
+
+    pitch.lines(filtered_events[mask_complete].start_x, filtered_events[mask_complete].start_y,
+                        filtered_events[mask_complete].end_x, filtered_events[mask_complete].end_y,
+                        lw=3, transparent=True, comet=True, label=f'Successful {event_type_correct_name}',
+                        color=colour_success, ax=axs['pitch'])
+    pitch.lines(filtered_events[~mask_complete].start_x, filtered_events[~mask_complete].start_y,
+                        filtered_events[~mask_complete].end_x, filtered_events[~mask_complete].end_y,
+                        lw=3, transparent=True, comet=True, label=f'Unsuccessful {event_type_correct_name}',
+                        color=colour_fail, ax=axs['pitch'],alpha=0.7)
     
-      pitch.lines(filtered_events[mask_complete].start_x, filtered_events[mask_complete].start_y,
-                          filtered_events[mask_complete].end_x, filtered_events[mask_complete].end_y,
-                          lw=2.5, transparent=True, comet=True, label=f'Successful {event_type_correct_name}',
-                          color=colour_success, ax=axs['pitch'])
-      pitch.lines(filtered_events[~mask_complete].start_x, filtered_events[~mask_complete].start_y,
-                          filtered_events[~mask_complete].end_x, filtered_events[~mask_complete].end_y,
-                          lw=2.5, transparent=True, comet=True, label=f'Unsuccessful {event_type_correct_name}',
-                          color=colour_fail, ax=axs['pitch'],alpha=0.7)
-      
-      pitch.scatter(filtered_events[mask_complete].end_x, filtered_events[mask_complete].end_y,
-                      ax=axs['pitch'], color=colour_success, s=15)
-      
-      pitch.scatter(filtered_events[~mask_complete].end_x, filtered_events[~mask_complete].end_y,
-                      ax=axs['pitch'], color=colour_fail,s=15)
-          
+    pitch.scatter(filtered_events[mask_complete].end_x, filtered_events[mask_complete].end_y,
+                    ax=axs['pitch'], color=colour_success, s=15)
+    
+    pitch.scatter(filtered_events[~mask_complete].end_x, filtered_events[~mask_complete].end_y,
+                    ax=axs['pitch'], color=colour_fail,s=15)
+        
   elif ((selected_type_name == 'take_on') | (selected_type_name == 'keeper_claim')):
-    
-      pitch.scatter(filtered_events[mask_complete].start_x, filtered_events[mask_complete].start_y,
-                      ax=axs['pitch'], color=colour_success,s=15, label=f"Successful {event_type_correct_name}")
-      pitch.scatter(filtered_events[~mask_complete].start_x, filtered_events[~mask_complete].start_y,
-                      ax=axs['pitch'], color=colour_fail,s=15, label = f"Unsuccessful {event_type_correct_name}")
-          
+    filtered_events = events_df[(events_df['type_name'] == selected_type_name) & (events_df['result_name'].isin(event_result))]
+    mask_complete = filtered_events.result_name.isin(["success"])
+
+    pitch.scatter(filtered_events[mask_complete].start_x, filtered_events[mask_complete].start_y,
+                    ax=axs['pitch'], color=colour_success,s=15, label=f"Successful {event_type_correct_name}")
+    pitch.scatter(filtered_events[~mask_complete].start_x, filtered_events[~mask_complete].start_y,
+                    ax=axs['pitch'], color=colour_fail,s=15, label = f"Unsuccessful {event_type_correct_name}")
+        
   elif ((selected_type_name == 'interception') | (selected_type_name == 'clearance') | (selected_type_name == 'tackle') 
-          | (selected_type_name == 'keeper_pick_up') | (selected_type_name == 'keeper_save') | (selected_type_name == 'keeper_punch')):
+        | (selected_type_name == 'keeper_pick_up') | (selected_type_name == 'keeper_save') | (selected_type_name == 'keeper_punch')):
+    filtered_events = events_df[(events_df['type_name'] == selected_type_name) & (events_df['result_name'].isin(event_result))]
+    mask_complete = filtered_events.result_name.isin(["success"])
+
+    pitch.scatter(filtered_events[mask_complete].start_x, filtered_events[mask_complete].start_y,
+                    ax=axs['pitch'], color=colour_success, s=15, label = f"Successful {event_type_correct_name}")
     
-      pitch.scatter(filtered_events[mask_complete].start_x, filtered_events[mask_complete].start_y,
-                      ax=axs['pitch'], color=colour_success, s=15, label = f"Successful {event_type_correct_name}")
-      
   elif ((selected_type_name == 'bad_touch') | (selected_type_name == 'foul')):
+    filtered_events = events_df[(events_df['type_name'] == selected_type_name) & (events_df['result_name'].isin(event_result))]
+    mask_complete = filtered_events.result_name.isin(["success"])
+
+    pitch.scatter(filtered_events[mask_complete].start_x, filtered_events[mask_complete].start_y,
+                    ax=axs['pitch'], color=colour_fail, s=15, label = f"{event_type_correct_name}")
+
+  elif ((selected_type_name == 'Goal')):
+    filtered_events = events_df[(events_df['type_name'] == 'shot') & (events_df['result_name']=='success')]
+
+    pitch.lines(filtered_events.start_x, filtered_events.start_y,
+                        filtered_events.end_x, filtered_events.end_y,
+                        lw=3, transparent=True, comet=True, label=f'Goals',
+                        color=colour_success, ax=axs['pitch'])
     
-      pitch.scatter(filtered_events[~mask_complete].start_x, filtered_events[~mask_complete].start_y,
-                      ax=axs['pitch'], color=colour_fail, s=15, label = f"{event_type_correct_name}")
-    # Display the plot in Streamlit
+    pitch.scatter(filtered_events.end_x, filtered_events.end_y,
+                    ax=axs['pitch'], color=colour_success, s=15)
+  
+  elif ((selected_type_name == 'Open Play Assist')):
+    filtered_events = events_df[(events_df['open_play_assist'] == 1)]
+
+    pitch.lines(filtered_events.start_x, filtered_events.start_y,
+                        filtered_events.end_x, filtered_events.end_y,
+                        lw=3, transparent=True, comet=True, label=f'Open Play Assist',
+                        color=colour_success, ax=axs['pitch'])
+    
+    pitch.scatter(filtered_events.end_x, filtered_events.end_y,
+                    ax=axs['pitch'], color=colour_success, s=15)
+    
+  elif ((selected_type_name == 'Set-Piece Assist')):
+    filtered_events = events_df[(events_df['set_piece_assist'] == 1)]
+
+    pitch.lines(filtered_events.start_x, filtered_events.start_y,
+                        filtered_events.end_x, filtered_events.end_y,
+                        lw=3, transparent=True, comet=True, label=f'Open Play Assist',
+                        color=colour_success, ax=axs['pitch'])
+    
+    pitch.scatter(filtered_events.end_x, filtered_events.end_y,
+                    ax=axs['pitch'], color=colour_success, s=15)
+    
+  elif ((selected_type_name == 'Most Dangerous Passes')):
+    filtered_events = events_df[(events_df['type_name'] == 'pass') & (events_df['result_name'] == 'success')]
+    filtered_events=filtered_events.sort_values(by='xT_value', ascending=False).head(10)
+
+    pitch.lines(filtered_events.start_x, filtered_events.start_y,
+                        filtered_events.end_x, filtered_events.end_y,
+                        lw=3, transparent=True, comet=True, label=f'Most Dangerous Passes (10)',
+                        color=colour_success, ax=axs['pitch'])
+    
+    pitch.scatter(filtered_events.end_x, filtered_events.end_y,
+                    ax=axs['pitch'], color=colour_success, s=15)
+  
+  elif ((selected_type_name == 'Most Dangerous Carries')):
+    filtered_events = events_df[(events_df['type_name'] == 'dribble') & (events_df['result_name'] == 'success')]
+    filtered_events=filtered_events.sort_values(by='xT_value', ascending=False).head(10)
+
+    pitch.lines(filtered_events.start_x, filtered_events.start_y,
+                        filtered_events.end_x, filtered_events.end_y,
+                        lw=3, transparent=True, comet=True, label=f'Most Dangerous Carries (10)',
+                        color=colour_success, ax=axs['pitch'])
+    
+    pitch.scatter(filtered_events.end_x, filtered_events.end_y,
+                    ax=axs['pitch'], color=colour_success, s=15)
+    
+  elif ((selected_type_name == 'Attacking Third Passes')):
+    filtered_events = events_df[(events_df['type_name'] == 'pass') & (events_df['result_name'] == 'success') 
+                                & (events_df['end_x'] >= (105/3)*2)]
+
+    pitch.lines(filtered_events.start_x, filtered_events.start_y,
+                        filtered_events.end_x, filtered_events.end_y,
+                        lw=3, transparent=True, comet=True, label=f'Attacking Third Passes',
+                        color=colour_success, ax=axs['pitch'])
+    
+    pitch.scatter(filtered_events.end_x, filtered_events.end_y,
+                    ax=axs['pitch'], color=colour_success, s=15)
+  
+  elif ((selected_type_name == 'Attacking Third Carries')):
+    filtered_events = events_df[(events_df['type_name'] == 'dribble') & (events_df['result_name'] == 'success') 
+                                & (events_df['end_x'] >= (105/3)*2)]
+
+    pitch.lines(filtered_events.start_x, filtered_events.start_y,
+                        filtered_events.end_x, filtered_events.end_y,
+                        lw=3, transparent=True, comet=True, label=f'Attacking Third Carries',
+                        color=colour_success, ax=axs['pitch'])
+    
+    pitch.scatter(filtered_events.end_x, filtered_events.end_y,
+                    ax=axs['pitch'], color=colour_success, s=15)
+    
+  elif ((selected_type_name == 'Progressive Passes')):
+    filtered_events = events_df[(events_df['type_name'] == 'pass') & (events_df['result_name'] == 'success') 
+                                & ((events_df['start_x'] - events_df['end_x']).abs() >= 9) & (events_df['start_x'] < (events_df['end_x']))]
+
+    pitch.lines(filtered_events.start_x, filtered_events.start_y,
+                        filtered_events.end_x, filtered_events.end_y,
+                        lw=3, transparent=True, comet=True, label=f'Progressive Passes',
+                        color=colour_success, ax=axs['pitch'])
+    
+    pitch.scatter(filtered_events.end_x, filtered_events.end_y,
+                    ax=axs['pitch'], color=colour_success, s=15)
+    
+  elif ((selected_type_name == 'Progressive Carries')):
+    filtered_events = events_df[(events_df['type_name'] == 'dribble') & (events_df['result_name'] == 'success') 
+                                & ((events_df['start_x'] - events_df['end_x']).abs() >= 9) & (events_df['start_x'] < (events_df['end_x']))]
+
+    pitch.lines(filtered_events.start_x, filtered_events.start_y,
+                        filtered_events.end_x, filtered_events.end_y,
+                        lw=3, transparent=True, comet=True, label=f'Progressive Carries',
+                        color=colour_success, ax=axs['pitch'])
+    
+    pitch.scatter(filtered_events.end_x, filtered_events.end_y,
+                    ax=axs['pitch'], color=colour_success, s=15)
+    
+  #"Goal Creating Actions","Shot Creating Actions", "Progressive Passes","Progressive Carries",Most common pass clusters
+    
+  # Display the plot in Streamlit
   legend = axs['pitch'].legend(facecolor='#B2BEB5', edgecolor='None', fontsize=7, loc='upper left', handlelength=1)
   for text in legend.get_texts():
-      text.set_color('#FFFFFF')
-    
+    text.set_color('#FFFFFF')
+
   st.pyplot(fig)
 
 with st.expander('Events Manual'):
