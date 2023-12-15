@@ -300,11 +300,8 @@ if len(selected_match_ids)>0:
   image_path = f"Club Logos/{selected_team}_logo.png"
   image = plt.imread(image_path)
     
-  ax_image = add_image(image, fig, left=0.91, bottom=0.88, width=0.12,
+  ax_image = add_image(image, fig, left=0.91, bottom=0.86, width=0.12,
                 interpolation='hanning')
-    
-  filtered_events = events_df[(events_df['type_name'] == selected_type_name) & (events_df['result_name'].isin(event_result))]
-  mask_complete = filtered_events.result_name.isin(["success"])
     
   colour_success = '#0BDA51'
   colour_fail = '#BA4F45'
