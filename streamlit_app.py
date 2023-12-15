@@ -230,6 +230,8 @@ def get_player_events(selected_player, match_ids):
 # Call the function with the selected player and match IDs
 
 if len(selected_match_ids)>0:
+  events_df = get_player_events(selected_player, selected_match_ids)
+    
   unique_type_names = events_df['type_name'].unique().tolist()
 
   custom_metrics = ["Goal","Open Play Assist","Set-Piece Assist","Goal Creating Actions","Shot Creating Actions","Most Dangerous Passes"
