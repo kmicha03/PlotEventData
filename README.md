@@ -42,6 +42,8 @@ Welcome to the Football Event Data Streamlit App! This interactive web applicati
 ## Acknowledgments
 
 I would like to express my gratitude to McKay Johns for his workshop, Ben Griffis for inspiration, and to everyone who contributed with their opinion, designing or programming skills.
+Contributors:
+[@tb_fball]([https://twitter.com/kmicha03](https://twitter.com/tb_fball))
 
 ## Requests
 
