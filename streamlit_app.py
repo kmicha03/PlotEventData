@@ -230,9 +230,12 @@ def get_player_events(selected_player, match_ids):
 # Call the function with the selected player and match IDs
 
 if len(selected_match_ids)>0:
-  events_df = get_player_events(selected_player, selected_match_ids)
-
   unique_type_names = events_df['type_name'].unique().tolist()
+
+  custom_metrics = ["Goal","Open Play Assist","Set-Piece Assist","Goal Creating Actions","Shot Creating Actions","Most Dangerous Passes"
+                           ,"Attacking Third Passes", "Attacking Third Carries", "Progressive Passes","Progressive Carries"]
+
+  unique_type_names.extend(custom_metrics)
   # Generate human-readable names for the event types
   unique_type_names_readable = [name.replace('_', ' ').title() for name in unique_type_names]
 
@@ -246,10 +249,10 @@ if len(selected_match_ids)>0:
   selected_type_name_readable = st.sidebar.selectbox("Select an Event Type", unique_type_names_readable)
   selected_type_name = type_name_mapping[selected_type_name_readable]
 
-  event_results = events_df[events_df["type_name"] == selected_type_name]['result_name'].unique().tolist()
-    
-  event_result = st.sidebar.multiselect("Select Result Type", event_results, event_results)
-    
+  if selected_type_name not in custom_metrics:
+    event_results = events_df[events_df["type_name"] == selected_type_name]['result_name'].unique().tolist()
+    event_result = st.sidebar.multiselect("Select Result Type", event_results, event_results)
+      
   minutes_played = player_minutes_df[player_minutes_df["player_name"] == selected_player]["minutes_played"].iloc[0]
   event_type_correct_name = selected_type_name.replace('_', ' ').title()
   selected_positions_correct_name = ','.join(selected_positions)
@@ -511,6 +514,15 @@ with st.expander('Events Manual'):
       19. Keeper Pick Up: Keeper picks up the ball
       20. Keeper Save: Keeper saves a shot on goal
       21. Keeper Punch: Keeper punches the ball clear
-      22. Keeper Claim: Keeper catches a cross                   
+      22. Keeper Claim: Keeper catches a cross
+      23. Goal:
+      24. Open Play Assist: 
+      25. Set-Piece Assist:
+      26. Most Dangerous Passes(10):
+      27. Most Dangerous Carries(10):
+      28. Attacking Third Passes:
+      29. Attacking Third Carries:
+      30. Progressive Passes:
+      31: Progressive Carries:
     ''')
 
