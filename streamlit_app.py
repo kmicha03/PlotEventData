@@ -238,15 +238,16 @@ if len(selected_match_ids)>0:
                            ,"Attacking Third Passes", "Attacking Third Carries", "Progressive Passes","Progressive Carries"]
     #"Goal Creating Actions","Shot Creating Actions",
   unique_type_names.extend(custom_metrics)
+
+  if 'GK' not in selected_positions:
+        # Filter out event types starting with "keeper"
+        unique_type_names = [event for event in unique_type_names if not event.startswith('keeper')]
+      
   # Generate human-readable names for the event types
   unique_type_names_readable = [name.replace('_', ' ').title() for name in unique_type_names]
 
   # Create a mapping from the readable names back to the original technical names
   type_name_mapping = dict(zip(unique_type_names_readable, unique_type_names))
-
-  if 'GK' not in selected_positions:
-    # Filter out event types starting with "keeper"
-    unique_type_names = [event for event in unique_type_names if not event.startswith('keeper')]
 
   selected_type_name_readable = st.sidebar.selectbox("Select an Event Type", unique_type_names_readable)
   selected_type_name = type_name_mapping[selected_type_name_readable]
