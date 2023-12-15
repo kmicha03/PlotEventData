@@ -213,7 +213,7 @@ def get_player_events(selected_player, match_ids):
     cursor = conn.cursor()
 
     query = """
-        SELECT period_id, time_seconds, start_x, end_x, start_y, end_y,type_name,result_name,bodypart_name,"EPV","xT_value"
+        SELECT period_id, time_seconds, start_x, end_x, start_y, end_y,type_name,result_name,bodypart_name,"xT_value",open_play_assist,set_piece_assist,goal_creating_action,shot_creating_action
         FROM "Events"
         WHERE "player_id" = %s AND "game_id" IN %s;
     """
@@ -223,7 +223,7 @@ def get_player_events(selected_player, match_ids):
     result = cursor.fetchall()
 
     # Convert the result to a DataFrame
-    df = pd.DataFrame(result, columns=['period_id', 'time_seconds', 'start_x', 'end_x', 'start_y', 'end_y','type_name','result_name','bodypart_name','EPV','xT_value'])  # Add your columns here
+    df = pd.DataFrame(result, columns=['period_id', 'time_seconds', 'start_x', 'end_x', 'start_y', 'end_y','type_name','result_name','bodypart_name','xT_value','open_play_assist','set_piece_assist','goal_creating_action','shot_creating_action'])  # Add your columns here
 
     return df
 
