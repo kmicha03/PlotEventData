@@ -544,14 +544,14 @@ with st.expander('Events Manual'):
       20. Keeper Save: Keeper saves a shot on goal
       21. Keeper Punch: Keeper punches the ball clear
       22. Keeper Claim: Keeper catches a cross
-      23. Goal:
-      24. Open Play Assist: 
-      25. Set-Piece Assist:
-      26. Most Dangerous Passes(10):
-      27. Most Dangerous Carries(10):
-      28. Attacking Third Passes:
-      29. Attacking Third Carries:
-      30. Progressive Passes:
-      31: Progressive Carries:
+      23. Goal: A shot that leads to a goal
+      24. Open Play Assist: Assists from open play situations
+      25. Set-Piece Assist: Assists from set-pieces
+      26. Most Dangerous Passes(10): Top-10 Most Dangerous Passes sorted by their xT value
+      27. Most Dangerous Carries(10): Top-10 Most Dangerous Carries sorted by their xT value
+      28. Attacking Third Passes: Passes completed in the attacking third
+      29. Attacking Third Carries: Carries completed in the attacking third
+      30. Progressive Passes: A forward pass that attempts to advance a team significantly closer to the opponent’s goal
+      31: Progressive Carries: A forward carry that attempts to advance a team significantly closer to the opponent’s goal
     ''')
 
