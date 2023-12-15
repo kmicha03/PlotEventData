@@ -316,13 +316,13 @@ if len(selected_match_ids)>0:
     # Plot the completed passes
     pitch.lines(filtered_events[mask_complete].start_x, filtered_events[mask_complete].start_y,
                         filtered_events[mask_complete].end_x, filtered_events[mask_complete].end_y,
-                        lw=3, transparent=True, comet=True, label=f'Successful {event_type_correct_name}',
+                        lw=2, transparent=True, comet=True, label=f'Successful {event_type_correct_name}',
                         color=colour_success, ax=axs['pitch'])
 
       # Plot the other passes
     pitch.lines(filtered_events[~mask_complete].start_x, filtered_events[~mask_complete].start_y,
                         filtered_events[~mask_complete].end_x, filtered_events[~mask_complete].end_y,
-                        lw=3, transparent=True, comet=True, label=f'Unsuccessful {event_type_correct_name}',
+                        lw=2, transparent=True, comet=True, label=f'Unsuccessful {event_type_correct_name}',
                         color=colour_fail, ax=axs['pitch'],alpha=0.7)
     
     pitch.scatter(filtered_events[mask_complete].end_x, filtered_events[mask_complete].end_y,
@@ -339,11 +339,11 @@ if len(selected_match_ids)>0:
 
     pitch.lines(filtered_events[mask_complete].start_x, filtered_events[mask_complete].start_y,
                         filtered_events[mask_complete].end_x, filtered_events[mask_complete].end_y,
-                        lw=3, transparent=True, comet=True, label=f'Successful {event_type_correct_name}',
+                        lw=2, transparent=True, comet=True, label=f'Successful {event_type_correct_name}',
                         color=colour_success, ax=axs['pitch'])
     pitch.lines(filtered_events[~mask_complete].start_x, filtered_events[~mask_complete].start_y,
                         filtered_events[~mask_complete].end_x, filtered_events[~mask_complete].end_y,
-                        lw=3, transparent=True, comet=True, label=f'Unsuccessful {event_type_correct_name}',
+                        lw=2, transparent=True, comet=True, label=f'Unsuccessful {event_type_correct_name}',
                         color=colour_fail, ax=axs['pitch'],alpha=0.7)
     
     pitch.scatter(filtered_events[mask_complete].end_x, filtered_events[mask_complete].end_y,
@@ -381,7 +381,7 @@ if len(selected_match_ids)>0:
 
     pitch.lines(filtered_events.start_x, filtered_events.start_y,
                         filtered_events.end_x, filtered_events.end_y,
-                        lw=3, transparent=True, comet=True, label=f'Goals',
+                        lw=2, transparent=True, comet=True, label=f'Goals',
                         color=colour_success, ax=axs['pitch'])
     
     pitch.scatter(filtered_events.end_x, filtered_events.end_y,
@@ -392,7 +392,7 @@ if len(selected_match_ids)>0:
 
     pitch.lines(filtered_events.start_x, filtered_events.start_y,
                         filtered_events.end_x, filtered_events.end_y,
-                        lw=3, transparent=True, comet=True, label=f'Open Play Assist',
+                        lw=2, transparent=True, comet=True, label=f'Open Play Assist',
                         color=colour_success, ax=axs['pitch'])
     
     pitch.scatter(filtered_events.end_x, filtered_events.end_y,
@@ -403,7 +403,7 @@ if len(selected_match_ids)>0:
 
     pitch.lines(filtered_events.start_x, filtered_events.start_y,
                         filtered_events.end_x, filtered_events.end_y,
-                        lw=3, transparent=True, comet=True, label=f'Open Play Assist',
+                        lw=2, transparent=True, comet=True, label=f'Open Play Assist',
                         color=colour_success, ax=axs['pitch'])
     
     pitch.scatter(filtered_events.end_x, filtered_events.end_y,
@@ -415,7 +415,7 @@ if len(selected_match_ids)>0:
 
     pitch.lines(filtered_events.start_x, filtered_events.start_y,
                         filtered_events.end_x, filtered_events.end_y,
-                        lw=3, transparent=True, comet=True, label=f'Most Dangerous Passes (10)',
+                        lw=2, transparent=True, comet=True, label=f'Most Dangerous Passes (10)',
                         color=colour_success, ax=axs['pitch'])
     
     pitch.scatter(filtered_events.end_x, filtered_events.end_y,
@@ -427,7 +427,7 @@ if len(selected_match_ids)>0:
 
     pitch.lines(filtered_events.start_x, filtered_events.start_y,
                         filtered_events.end_x, filtered_events.end_y,
-                        lw=3, transparent=True, comet=True, label=f'Most Dangerous Carries (10)',
+                        lw=2, transparent=True, comet=True, label=f'Most Dangerous Carries (10)',
                         color=colour_success, ax=axs['pitch'])
     
     pitch.scatter(filtered_events.end_x, filtered_events.end_y,
@@ -439,7 +439,7 @@ if len(selected_match_ids)>0:
 
     pitch.lines(filtered_events.start_x, filtered_events.start_y,
                         filtered_events.end_x, filtered_events.end_y,
-                        lw=3, transparent=True, comet=True, label=f'Attacking Third Passes',
+                        lw=2, transparent=True, comet=True, label=f'Attacking Third Passes',
                         color=colour_success, ax=axs['pitch'])
     
     pitch.scatter(filtered_events.end_x, filtered_events.end_y,
@@ -451,35 +451,65 @@ if len(selected_match_ids)>0:
 
     pitch.lines(filtered_events.start_x, filtered_events.start_y,
                         filtered_events.end_x, filtered_events.end_y,
-                        lw=3, transparent=True, comet=True, label=f'Attacking Third Carries',
+                        lw=2, transparent=True, comet=True, label=f'Attacking Third Carries',
                         color=colour_success, ax=axs['pitch'])
     
     pitch.scatter(filtered_events.end_x, filtered_events.end_y,
                     ax=axs['pitch'], color=colour_success, s=15)
     
   elif ((selected_type_name == 'Progressive Passes')):
-    filtered_events = events_df[(events_df['type_name'] == 'pass') & (events_df['result_name'] == 'success') 
-                                & ((events_df['start_x'] - events_df['end_x']).abs() >= 9) & (events_df['start_x'] < (events_df['end_x']))]
-
+    # Constants for pitch halves
+    own_half = 52.5
+    opponents_half = 52.5
+    
+    # Define the conditions for a progressive pass
+    conditions = (
+        # If the pass starts and ends in the team's own half
+        ((events_df['start_x'] <= own_half) & (events_df['end_x'] <= own_half) & ((events_df['end_x'] - events_df['start_x']) >= 30)) |
+        # If the pass starts in the team's half and ends in the different half
+        ((events_df['start_x'] <= own_half) & (events_df['end_x'] > opponents_half) & ((events_df['end_x'] - events_df['start_x']) >= 15)) |
+        # If the pass starts and ends in the opponent's half
+        ((events_df['start_x'] > opponents_half) & (events_df['end_x'] > opponents_half) & ((events_df['end_x'] - events_df['start_x']) >= 10))
+    )
+    
+    # Apply the filter for 'pass' type and 'success' result along with the progressive pass conditions
+    filtered_events = events_df[(events_df['type_name'] == 'pass') & (events_df['result_name'] == 'success') & conditions]
+    
+    # Your plotting code remains the same
     pitch.lines(filtered_events.start_x, filtered_events.start_y,
-                        filtered_events.end_x, filtered_events.end_y,
-                        lw=3, transparent=True, comet=True, label=f'Progressive Passes',
-                        color=colour_success, ax=axs['pitch'])
+                filtered_events.end_x, filtered_events.end_y,
+                lw=2, transparent=True, comet=True, label='Progressive Passes',
+                color=colour_success, ax=axs['pitch'])
     
     pitch.scatter(filtered_events.end_x, filtered_events.end_y,
-                    ax=axs['pitch'], color=colour_success, s=15)
+                  ax=axs['pitch'], color=colour_success, s=15)
     
   elif ((selected_type_name == 'Progressive Carries')):
-    filtered_events = events_df[(events_df['type_name'] == 'dribble') & (events_df['result_name'] == 'success') 
-                                & ((events_df['start_x'] - events_df['end_x']).abs() >= 9) & (events_df['start_x'] < (events_df['end_x']))]
-
+        # Constants for pitch halves
+    own_half = 52.5
+    opponents_half = 52.5
+    
+    # Define the conditions for a progressive pass
+    conditions = (
+        # If the pass starts and ends in the team's own half
+        ((events_df['start_x'] <= own_half) & (events_df['end_x'] <= own_half) & ((events_df['end_x'] - events_df['start_x']) >= 30)) |
+        # If the pass starts in the team's half and ends in the different half
+        ((events_df['start_x'] <= own_half) & (events_df['end_x'] > opponents_half) & ((events_df['end_x'] - events_df['start_x']) >= 15)) |
+        # If the pass starts and ends in the opponent's half
+        ((events_df['start_x'] > opponents_half) & (events_df['end_x'] > opponents_half) & ((events_df['end_x'] - events_df['start_x']) >= 10))
+    )
+    
+    # Apply the filter for 'pass' type and 'success' result along with the progressive pass conditions
+    filtered_events = events_df[(events_df['type_name'] == 'dribble') & (events_df['result_name'] == 'success') & conditions]
+    
+    # Your plotting code remains the same
     pitch.lines(filtered_events.start_x, filtered_events.start_y,
-                        filtered_events.end_x, filtered_events.end_y,
-                        lw=3, transparent=True, comet=True, label=f'Progressive Carries',
-                        color=colour_success, ax=axs['pitch'])
+                filtered_events.end_x, filtered_events.end_y,
+                lw=2, transparent=True, comet=True, label='Progressive Passes',
+                color=colour_success, ax=axs['pitch'])
     
     pitch.scatter(filtered_events.end_x, filtered_events.end_y,
-                    ax=axs['pitch'], color=colour_success, s=15)
+                  ax=axs['pitch'], color=colour_success, s=15)
     
   #"Goal Creating Actions","Shot Creating Actions", "Progressive Passes","Progressive Carries",Most common pass clusters
     
