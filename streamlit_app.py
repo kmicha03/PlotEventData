@@ -234,9 +234,9 @@ if len(selected_match_ids)>0:
     
   unique_type_names = events_df['type_name'].unique().tolist()
 
-  custom_metrics = ["Goal","Open Play Assist","Set-Piece Assist","Goal Creating Actions","Shot Creating Actions","Most Dangerous Passes"
+  custom_metrics = ["Goal","Open Play Assist","Set-Piece Assist","Most Dangerous Passes"
                            ,"Attacking Third Passes", "Attacking Third Carries", "Progressive Passes","Progressive Carries"]
-
+    #"Goal Creating Actions","Shot Creating Actions",
   unique_type_names.extend(custom_metrics)
   # Generate human-readable names for the event types
   unique_type_names_readable = [name.replace('_', ' ').title() for name in unique_type_names]
