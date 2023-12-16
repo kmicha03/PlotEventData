@@ -44,10 +44,10 @@ def get_available_leagues():
             Select
               name,id
             from
-              "leagues"
+              "leagues" l
             where
-               active=1
-            order by order 
+               l.active=1
+            order by l.order 
         """)
 
     result = cursor.fetchall()
