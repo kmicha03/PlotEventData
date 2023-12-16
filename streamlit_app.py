@@ -36,7 +36,7 @@ conn = psycopg2.connect(
     database=st.secrets["db_name"]
 )
 
-
+@st.cache_data
 def get_available_leagues():
     cursor = conn.cursor()
 
@@ -56,7 +56,8 @@ def get_available_leagues():
         return leagues
     else:
         return None
-    
+        
+@st.cache_data    
 def get_league_teams(selected_league):
     league_id = league_mapping[selected_league]
     cursor = conn.cursor()
@@ -78,7 +79,8 @@ def get_league_teams(selected_league):
         return teams
     else:
         return None
-    
+        
+@st.cache_data    
 def get_players(selected_team):
     team_id = teams_mapping[selected_team]
 
@@ -206,6 +208,7 @@ match_id_mapping = {row['Match']: row['match_id'] for index, row in matches.iter
 # Get selected match IDs from selected matches
 selected_match_ids = [match_id_mapping[match] for match in selected_matches]
 
+@st.cache_data
 def get_player_events(selected_player, match_ids):
     player_id = str(players[players['player_name'] == selected_player]["player_id"].iloc[0])
     match_ids_tuple = tuple(match_ids)  # Convert list to tuple for SQL query
