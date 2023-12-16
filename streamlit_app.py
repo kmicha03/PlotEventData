@@ -47,6 +47,7 @@ def get_available_leagues():
               "leagues"
             where
                active=1
+            order by order 
         """)
 
     result = cursor.fetchall()
