@@ -238,7 +238,7 @@ if len(selected_match_ids)>0:
     
   unique_type_names = events_df['type_name'].unique().tolist()
 
-  custom_metrics = ["Goal","Open Play Assist","Set-Piece Assist","Most Dangerous Passes"
+  custom_metrics = ["Aerials","Goal","Open Play Assist","Set-Piece Assist","Most Dangerous Passes"
                            ,"Attacking Third Passes", "Attacking Third Carries", "Progressive Passes","Progressive Carries"]
     #"Goal Creating Actions","Shot Creating Actions",
   unique_type_names.extend(custom_metrics)
@@ -380,7 +380,16 @@ if len(selected_match_ids)>0:
 
     pitch.scatter(filtered_events[mask_complete].start_x, filtered_events[mask_complete].start_y,
                     ax=axs['pitch'], color=colour_fail, s=15, label = f"{event_type_correct_name}")
+      
+  elif ((selected_type_name == 'Aerials')):
+    filtered_events = events_df[(events_df['bodypart_name'] == 'head')]
+    mask_complete = filtered_events.result_name.isin(["success"])
 
+    pitch.scatter(filtered_events[mask_complete].start_x, filtered_events[mask_complete].start_y,
+                    ax=axs['pitch'], color=colour_success,s=15, label=f"Successful {event_type_correct_name}")
+    pitch.scatter(filtered_events[~mask_complete].start_x, filtered_events[~mask_complete].start_y,
+                    ax=axs['pitch'], color=colour_fail,s=15, label = f"Unsuccessful {event_type_correct_name}")
+    
   elif ((selected_type_name == 'Goal')):
     filtered_events = events_df[(events_df['type_name'] == 'shot') & (events_df['result_name']=='success')]
 
