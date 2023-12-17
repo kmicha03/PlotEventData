@@ -565,8 +565,8 @@ with st.expander('Events Manual'):
       27. Most Dangerous Carries(10): Top-10 Most Dangerous Carries sorted by their xT value
       28. Attacking Third Passes: Passes completed in the attacking third
       29. Attacking Third Carries: Carries completed in the attacking third
-      30. Progressive Passes: A forward pass that attempts to advance a team significantly closer to the opponent’s goal
-      31. Progressive Carries: A forward carry that attempts to advance a team significantly closer to the opponent’s goal
+      30. Progressive Passes: A forward pass that attempts to advance a team significantly closer to the opponent’s goal (WyScout implementation)
+      31. Progressive Carries: A forward carry that attempts to advance a team significantly closer to the opponent’s goal (WyScout implementation)
       32. Aerials: Any action that was made with a player's head
     ''')
 
