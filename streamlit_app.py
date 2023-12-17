@@ -543,7 +543,7 @@ with st.expander('Events Manual'):
       5. Bad Touch: When a player mis-controls the ball with a poor touch and loses the ball
       6. Take On: Attempt to dribble past opponent
       7. Foul: Any infringement penalised as foul play by a referee that results in a free-kick or penalty event
-      8. Tackle: Tackle on the ball
+      8. Tackle: Tackle on the ball to regain possession (ball recovery)
       9. Cross: A cross into the box
       10. Shot: Shot attempt not from penalty or free-kick
       11. Throw-in: A throw-in from a player
@@ -566,6 +566,7 @@ with st.expander('Events Manual'):
       28. Attacking Third Passes: Passes completed in the attacking third
       29. Attacking Third Carries: Carries completed in the attacking third
       30. Progressive Passes: A forward pass that attempts to advance a team significantly closer to the opponent’s goal
-      31: Progressive Carries: A forward carry that attempts to advance a team significantly closer to the opponent’s goal
+      31. Progressive Carries: A forward carry that attempts to advance a team significantly closer to the opponent’s goal
+      32. Aerials: Any action that was made with a player's head
     ''')
 
