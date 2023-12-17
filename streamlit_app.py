@@ -289,7 +289,7 @@ if len(selected_match_ids)>0:
                       grid_height=0.84)
     
     # endnote and title
-  axs['endnote'].text(1, 0.5, '@kmicha03', va='center', ha='right', fontsize=15,color='#dee6ea')
+  axs['endnote'].text(1, 0.5, 'Created by @kmicha03', va='center', ha='right', fontsize=12,color='#dee6ea')
     
   # Assuming 'axs' is a dictionary of axes, if 'title' is an axis dedicated for the title, use it like this:
   axs['title'].text(0, 0.9, plot_title, color='#dee6ea', va='center', ha='left', fontsize=20, weight='bold')
