@@ -361,7 +361,9 @@ if len(selected_match_ids)>0:
         axs['pitch'].text(position[0], position[1], text, ha='center', va='center', color = '#dee6ea')
 
     cmap = mpl.colormaps['RdYlGn']
-    colors = np.array([cmap(x) if x != 0 else '#86000a' for x in filtered_events['expectedGoalsOnTarget']])
+      
+    dark_red_rgba = to_rgba('#86000a')
+    colors = np.array([cmap(x) if x != 0 else dark_red_rgba for x in filtered_events['expectedGoalsOnTarget']])
 
     #plt.cm.get_cmap('RdYlGn')# Scale sizes based on expectedGoals
     pitch.lines(filtered_events[mask_complete].start_x, filtered_events[mask_complete].start_y,
