@@ -311,7 +311,7 @@ if len(selected_match_ids)>0:
   image_path = f"Club Logos/{selected_team}_logo.png"
   image = plt.imread(image_path)
     
-  ax_image = add_image(image, fig, left=0.91, bottom=0.88, width=0.12,
+  ax_image = add_image(image, fig, left=0.93, bottom=0.86, width=0.12,
                 interpolation='hanning')
     
   colour_success = '#0BDA51'
