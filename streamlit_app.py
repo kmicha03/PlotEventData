@@ -356,7 +356,7 @@ if len(selected_match_ids)>0:
     for text, position in zip(texts, positions):
         axs['pitch'].text(position[0], position[1], text, ha='center', va='center', color = '#dee6ea')
 
-    cmap = matplotlib.colormaps['RdYlGn']
+    cmap = mpl.colormaps['RdYlGn']
     #plt.cm.get_cmap('RdYlGn')# Scale sizes based on expectedGoals
     pitch.lines(filtered_events[mask_complete].start_x, filtered_events[mask_complete].start_y,
                 filtered_events[mask_complete].end_x, filtered_events[mask_complete].end_y,
