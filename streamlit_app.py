@@ -377,11 +377,11 @@ if len(selected_match_ids)>0:
 
     # Scatter plot for completed passes with size based on expectedGoals
     pitch.scatter(filtered_events[mask_complete].start_x, filtered_events[mask_complete].start_y,
-                  ax=axs['pitch'], cmap=cmap,  s=(filtered_events[mask_complete].expectedGoals * 50) + 15,c=colors[mask_complete])
+                  ax=axs['pitch'], cmap=cmap,  s=(filtered_events[mask_complete].expectedGoals * 50) + 15,c=filtered_events[mask_complete].expectedGoalsOnTarget))
 
     # Scatter plot for other passes with size based on expectedGoals
     pitch.scatter(filtered_events[~mask_complete].start_x, filtered_events[~mask_complete].start_y,
-                  ax=axs['pitch'], cmap=cmap,  s=(filtered_events[~mask_complete].expectedGoals * 50) + 15,c=colors[~mask_complete])
+                  ax=axs['pitch'], cmap=cmap,  s=(filtered_events[~mask_complete].expectedGoals * 50) + 15,c=filtered_events[~mask_complete].expectedGoalsOnTarget))
 
     norm = mpl.colors.Normalize(vmin=0, vmax=1)
 
