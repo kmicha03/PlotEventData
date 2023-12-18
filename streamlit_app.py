@@ -7,6 +7,8 @@ import seaborn as sns
 import urllib.request
 from PIL import Image
 import matplotlib as mpl
+from matplotlib.colors import to_rgba
+
 
 import streamlit as st
 import types
