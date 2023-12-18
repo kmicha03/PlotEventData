@@ -5,4 +5,4 @@ pandas
 seaborn
 psycopg2-binary
 mplsoccer
-
+matplotlib
