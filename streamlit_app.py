@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import urllib.request
 from PIL import Image
-
+import matplotlib as mpl
 
 import streamlit as st
 import types
