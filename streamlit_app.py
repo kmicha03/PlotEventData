@@ -361,6 +361,8 @@ if len(selected_match_ids)>0:
         axs['pitch'].text(position[0], position[1], text, ha='center', va='center', color = '#dee6ea')
 
     cmap = mpl.colormaps['RdYlGn']
+    colors = np.array([cmap(x) if x != 0 else (1, 0, 0, 1) for x in filtered_events['expectedGoalsOnTarget']])
+
     #plt.cm.get_cmap('RdYlGn')# Scale sizes based on expectedGoals
     pitch.lines(filtered_events[mask_complete].start_x, filtered_events[mask_complete].start_y,
                 filtered_events[mask_complete].end_x, filtered_events[mask_complete].end_y,
@@ -375,11 +377,11 @@ if len(selected_match_ids)>0:
 
     # Scatter plot for completed passes with size based on expectedGoals
     pitch.scatter(filtered_events[mask_complete].start_x, filtered_events[mask_complete].start_y,
-                  ax=axs['pitch'], cmap=cmap,  s=(filtered_events[mask_complete].expectedGoals * 50) + 15,c=filtered_events[mask_complete].expectedGoalsOnTarget)
+                  ax=axs['pitch'], cmap=cmap,  s=(filtered_events[mask_complete].expectedGoals * 50) + 15,c=colors[mask_complete])
 
     # Scatter plot for other passes with size based on expectedGoals
     pitch.scatter(filtered_events[~mask_complete].start_x, filtered_events[~mask_complete].start_y,
-                  ax=axs['pitch'], cmap=cmap,  s=(filtered_events[~mask_complete].expectedGoals * 50) + 15,c=filtered_events[~mask_complete].expectedGoalsOnTarget)
+                  ax=axs['pitch'], cmap=cmap,  s=(filtered_events[~mask_complete].expectedGoals * 50) + 15,c=colors[~mask_complete])
 
     norm = mpl.colors.Normalize(vmin=0, vmax=1)
 
