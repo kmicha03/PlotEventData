@@ -218,7 +218,7 @@ def get_player_events(selected_player, match_ids):
 
     query = """
         SELECT e.period_id, e.time_seconds, e.start_x, e.end_x, e.start_y, e.end_y,e.type_name,e.result_name,e.bodypart_name,e."xT_value",e.open_play_assist,e.set_piece_assist,e.goal_creating_action,e.shot_creating_action, e."expectedGoals", e."expectedGoalsOnTarget", e.situation
-        FROM "Events"
+        FROM "Events" e
         WHERE "player_id" = %s AND "game_id" IN %s;
     """
 
