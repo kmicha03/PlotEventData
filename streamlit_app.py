@@ -217,7 +217,7 @@ def get_player_events(selected_player, match_ids):
     cursor = conn.cursor()
 
     query = """
-        SELECT period_id, time_seconds, start_x, end_x, start_y, end_y,type_name,result_name,bodypart_name,"xT_value",open_play_assist,set_piece_assist,goal_creating_action,shot_creating_action
+        SELECT e.period_id, e.time_seconds, e.start_x, e.end_x, e.start_y, e.end_y,e.type_name,e.result_name,e.bodypart_name,e."xT_value",e.open_play_assist,e.set_piece_assist,e.goal_creating_action,e.shot_creating_action, e."expectedGoals", e."expectedGoalsOnTarget", e.situation
         FROM "Events"
         WHERE "player_id" = %s AND "game_id" IN %s;
     """
@@ -227,7 +227,7 @@ def get_player_events(selected_player, match_ids):
     result = cursor.fetchall()
 
     # Convert the result to a DataFrame
-    df = pd.DataFrame(result, columns=['period_id', 'time_seconds', 'start_x', 'end_x', 'start_y', 'end_y','type_name','result_name','bodypart_name','xT_value','open_play_assist','set_piece_assist','goal_creating_action','shot_creating_action'])  # Add your columns here
+    df = pd.DataFrame(result, columns=['period_id', 'time_seconds', 'start_x', 'end_x', 'start_y', 'end_y','type_name','result_name','bodypart_name','xT_value','open_play_assist','set_piece_assist','goal_creating_action','shot_creating_action','expectedGoals', 'expectedGoalsOnTarget', 'situation'])  # Add your columns here
 
     return df
 
@@ -312,9 +312,9 @@ if len(selected_match_ids)>0:
   colour_fail = '#BA4F45'
     
           # Filter the DataFrame based on the selected event type
-  if ((selected_type_name == 'throw_in') | (selected_type_name == 'cross') | (selected_type_name == 'pass') | (selected_type_name == 'shot') 
+  if ((selected_type_name == 'throw_in') | (selected_type_name == 'cross') | (selected_type_name == 'pass')
       | (selected_type_name == 'freekick_short') | (selected_type_name == 'corner_crossed') | (selected_type_name == 'freekick_crossed') 
-      | (selected_type_name == 'corner_short') | (selected_type_name == 'shot_freekick') | (selected_type_name == 'shot_corner') | (selected_type_name == 'goalkick')):
+      | (selected_type_name == 'corner_short') | (selected_type_name == 'shot_corner') | (selected_type_name == 'goalkick')):
           
     filtered_events = events_df[(events_df['type_name'] == selected_type_name) & (events_df['result_name'].isin(event_result))]
     mask_complete = filtered_events.result_name.isin(["success"])
@@ -336,7 +336,74 @@ if len(selected_match_ids)>0:
     pitch.scatter(filtered_events[~mask_complete].end_x, filtered_events[~mask_complete].end_y,
                     ax=axs['pitch'], color=colour_fail,s=15)
       
-        
+  elif ((selected_type_name == 'shot') | (selected_type_name == 'shot_freekick') ):
+    filtered_events = events_df[(events_df['type_name'] == selected_type_name) & (events_df['result_name'].isin(event_result))]
+    mask_complete = filtered_events.result_name.isin(["success"])
+    # Plot the completed passes
+    # Plot the completed passes with line color based on expectedGoalsOnTarget
+    filtered_events['expectedGoals'] = filtered_events['expectedGoals'].fillna(0)
+    filtered_events['expectedGoalsOnTarget'] = filtered_events['expectedGoalsOnTarget'].fillna(0)
+
+    total_goals = f"Total Goals: {len(filtered_events[filtered_events['result_name']=='success'])}"
+    total_shots = f"Total Shots: {len(filtered_events)}"
+    total_xG = f"Total xG: {filtered_events.expectedGoals.sum():.2f}"
+    total_xGOT = f"Total xGOT: {filtered_events.expectedGoalsOnTarget.sum():.2f}"
+
+    texts = [total_shots, total_goals, total_xG, total_xGOT]
+    positions = [(33, 40), (33, 35), (33, 30), (33, 25)]  # Replace (x, y) with actual coordinates
+
+    # Add texts to the plot
+    for text, position in zip(texts, positions):
+        axs['pitch'].text(position[0], position[1], text, ha='center', va='center', color = '#dee6ea')
+
+    cmap = plt.cm.get_cmap('RdYlGn')# Scale sizes based on expectedGoals
+    pitch.lines(filtered_events[mask_complete].start_x, filtered_events[mask_complete].start_y,
+                filtered_events[mask_complete].end_x, filtered_events[mask_complete].end_y,
+                lw=2, transparent=True, comet=True, label=f'Successful {event_type_correct_name}',
+                color=colour_success, ax=axs['pitch'])
+
+    # Plot the other passes with line color based on expectedGoalsOnTarget
+    pitch.lines(filtered_events[~mask_complete].start_x, filtered_events[~mask_complete].start_y,
+                filtered_events[~mask_complete].end_x, filtered_events[~mask_complete].end_y,
+                lw=2, transparent=True, comet=True, label=f'Unsuccessful {event_type_correct_name}',
+                color=colour_fail, ax=axs['pitch'], alpha=0.7)
+
+    # Scatter plot for completed passes with size based on expectedGoals
+    pitch.scatter(filtered_events[mask_complete].start_x, filtered_events[mask_complete].start_y,
+                  ax=axs['pitch'], cmap=cmap,  s=(filtered_events[mask_complete].expectedGoals * 50) + 15,c=filtered_events[mask_complete].expectedGoalsOnTarget)
+
+    # Scatter plot for other passes with size based on expectedGoals
+    pitch.scatter(filtered_events[~mask_complete].start_x, filtered_events[~mask_complete].start_y,
+                  ax=axs['pitch'], cmap=cmap,  s=(filtered_events[~mask_complete].expectedGoals * 50) + 15,c=filtered_events[~mask_complete].expectedGoalsOnTarget)
+
+    norm = mpl.colors.Normalize(vmin=0, vmax=1)
+
+    # Create a colorbar for the colormap
+    sm = plt.cm.ScalarMappable(cmap=cmap, norm=norm)  # Use cmap_success or cmap_fail as needed
+    sm.set_array([])
+
+    # Add the colorbar to the plot
+    cb = plt.colorbar(sm, ax=axs['endnote'], orientation='horizontal',aspect=80)
+    cb.set_label('xGOT', color = '#dee6ea' )   
+
+    # Change color of the colorbar's tick labels
+    cb.ax.xaxis.set_tick_params(color='#dee6ea')  # Change 'white' to any suitable color
+    cb.ax.xaxis.label.set_color('#dee6ea')  # Change 'white' to the color of your choice
+
+        # Additional: Change the color of the colorbar's ticks
+    plt.setp(plt.getp(cb.ax.axes, 'xticklabels'), color='#dee6ea')
+
+    sample_sizes = [(0.3,15), 
+                    (0.6,30), 
+                    (0.9,45)]
+
+    # Create sample points for each size with formatted labels
+    for size in sample_sizes:
+        label = f'{size[0]:.2f} xG'  # Format to 2 decimal places
+        axs['pitch'].scatter([], [], c='black', alpha=0.5, s=size[1], label=label)
+
+    # Add the legend for sizes
+    axs['pitch'].legend(loc='upper right', title='xG')
   elif ((selected_type_name == 'dribble')):
 
     filtered_events = events_df[(events_df['type_name'] == selected_type_name) & (events_df['result_name'].isin(event_result))]
