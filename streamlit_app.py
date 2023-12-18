@@ -259,6 +259,10 @@ if len(selected_match_ids)>0:
   if selected_type_name not in custom_metrics:
     event_results = events_df[events_df["type_name"] == selected_type_name]['result_name'].unique().tolist()
     event_result = st.sidebar.multiselect("Select Result Type", event_results, event_results)
+
+  if selected_type_name == 'shot':
+    situations_types = events_df['situation'].unique().tolist()  
+    situation = st.sidebar.multiselect("Select Situation Type", situations_types, situations_types)
       
   minutes_played = player_minutes_df[player_minutes_df["player_name"] == selected_player]["minutes_played"].iloc[0]
   event_type_correct_name = selected_type_name.replace('_', ' ').title()
@@ -337,7 +341,7 @@ if len(selected_match_ids)>0:
                     ax=axs['pitch'], color=colour_fail,s=15)
       
   elif ((selected_type_name == 'shot') | (selected_type_name == 'shot_freekick') ):
-    filtered_events = events_df[(events_df['type_name'] == selected_type_name) & (events_df['result_name'].isin(event_result))]
+    filtered_events = events_df[(events_df['type_name'] == selected_type_name) & (events_df['result_name'].isin(event_result) & (events_df['situation'].isin(situation))]
     mask_complete = filtered_events.result_name.isin(["success"])
     # Plot the completed passes
     # Plot the completed passes with line color based on expectedGoalsOnTarget
