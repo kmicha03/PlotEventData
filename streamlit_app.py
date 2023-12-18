@@ -345,8 +345,8 @@ if len(selected_match_ids)>0:
     mask_complete = filtered_events.result_name.isin(["success"])
     # Plot the completed passes
     # Plot the completed passes with line color based on expectedGoalsOnTarget
-    filtered_events['expectedGoals'].fillna(0)
-    filtered_events['expectedGoalsOnTarget'].fillna(0)
+    filtered_events['expectedGoals'].fillna(0,inplace=True)
+    filtered_events['expectedGoalsOnTarget'].fillna(0,inplace=True)
 
     total_goals = f"Total Goals: {len(filtered_events[filtered_events['result_name']=='success'])}"
     total_shots = f"Total Shots: {len(filtered_events)}"
