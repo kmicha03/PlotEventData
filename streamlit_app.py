@@ -550,7 +550,7 @@ if len(selected_match_ids)>0:
     penalty_box_length = 16.5  # Length of the penalty box
     penalty_box_width = 40.3   # Width of the penalty box
     
-    filtered_events_penalty_box = events_df[
+    filtered_events = events_df[
         (events_df['type_name'] == 'pass') & 
         (events_df['result_name'] == 'success') & 
         (events_df['end_x'] >= (pitch_length - penalty_box_length)) & 
@@ -573,7 +573,7 @@ if len(selected_match_ids)>0:
     penalty_box_length = 16.5  # Length of the penalty box
     penalty_box_width = 40.3   # Width of the penalty box
     
-    filtered_events_penalty_box = events_df[
+    filtered_events = events_df[
         (events_df['type_name'] == 'dribble') & 
         (events_df['result_name'] == 'success') & 
         (events_df['end_x'] >= (pitch_length - penalty_box_length)) & 
