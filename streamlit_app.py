@@ -240,7 +240,7 @@ if len(selected_match_ids)>0:
     
   unique_type_names = events_df['type_name'].unique().tolist()
 
-  custom_metrics = ["Aerials","Goal","Open Play Assist","Set-Piece Assist","Most Dangerous Passes"
+  custom_metrics = ["Aerials","Open Play Assist","Set-Piece Assist","Most Dangerous Passes"
                            ,"Attacking Third Passes", "Attacking Third Carries", "Progressive Passes","Progressive Carries","Goal Creating Actions","Shot Creating Actions"]
   unique_type_names.extend(custom_metrics)
 
@@ -264,7 +264,12 @@ if len(selected_match_ids)>0:
   if selected_type_name == 'shot':
     situations_types = events_df['situation'].unique().tolist()  
     situation = st.sidebar.multiselect("Select Situation Type", situations_types, situations_types)
-      
+
+  if (selected_type_name == 'Goal Creating Actions') | (selected_type_name == 'Shot Creating Actions'):
+    action_types = events_df['type_name'].unique().tolist()  
+    action = st.sidebar.multiselect("Select Action", action_types, action_types)
+
+    
   minutes_played = player_minutes_df[player_minutes_df["player_name"] == selected_player]["minutes_played"].iloc[0]
   event_type_correct_name = selected_type_name.replace('_', ' ').title()
   selected_positions_correct_name = ','.join(selected_positions)
@@ -464,17 +469,6 @@ if len(selected_match_ids)>0:
                     ax=axs['pitch'], color=colour_success,s=15, label=f"Successful {event_type_correct_name}")
     pitch.scatter(filtered_events[~mask_complete].start_x, filtered_events[~mask_complete].start_y,
                     ax=axs['pitch'], color=colour_fail,s=15, label = f"Unsuccessful {event_type_correct_name}")
-    
-  elif ((selected_type_name == 'Goal')):
-    filtered_events = events_df[(events_df['type_name'] == 'shot') & (events_df['result_name']=='success')]
-
-    pitch.lines(filtered_events.start_x, filtered_events.start_y,
-                        filtered_events.end_x, filtered_events.end_y,
-                        lw=2, transparent=True, comet=True, label=f'Goals',
-                        color=colour_success, ax=axs['pitch'])
-    
-    pitch.scatter(filtered_events.end_x, filtered_events.end_y,
-                    ax=axs['pitch'], color=colour_success, s=15)
   
   elif ((selected_type_name == 'Open Play Assist')):
     filtered_events = events_df[(events_df['open_play_assist'] == 1)]
@@ -601,7 +595,7 @@ if len(selected_match_ids)>0:
                   ax=axs['pitch'], color=colour_success, s=15)
       
   elif ((selected_type_name == 'Goal Creating Actions')):
-    filtered_events = events_df[(events_df['goal_creating_action'] == 1) & (events_df['result_name'] == 'success')]
+    filtered_events = events_df[(events_df['goal_creating_action'] == 1) & (events_df['result_name'] == 'success') & (events_df['type_name'].isin(action)]
 
     markers_actions = ['bad_touch', 'clearance', 'foul', 'interception', 'keeper_pick_up', 'keeper_punch', 'tackle', 'take_on']
     lines_actions = ['corner_crossed', 'corner_short','dribble', 'cross', 'freekick_crossed', 'freekick_short', 'goalkick', 'pass', 'shot', 'shot_freekick', 'shot_penalty', 'throw_in']
