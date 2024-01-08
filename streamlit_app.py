@@ -353,7 +353,7 @@ if len(selected_match_ids)>0:
     label1 = f"Total Goals: {len(filtered_events[filtered_events['result_name']=='success'])} - Total Shots: {len(filtered_events)}"
     label2 = f"Total xG: {filtered_events.expectedGoals.sum():.2f} - Total xGOT: {filtered_events.expectedGoalsOnTarget.sum():.2f}"
       
-    texts = [total_shots, total_goals, total_xG, total_xGOT]
+    texts = [label1, label2]
     positions = [(33, 40), (33, 35)]  # Replace (x, y) with actual coordinates
 
     # Add texts to the plot
