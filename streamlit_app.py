@@ -504,10 +504,14 @@ if len(selected_match_ids)>0:
     pitch.lines(filtered_events.start_x, filtered_events.start_y,
                         filtered_events.end_x, filtered_events.end_y,
                         lw=2, transparent=True, comet=True, label=f'Most Dangerous Passes (10)',
-                        color=colour_success, ax=axs['pitch'])
+                        color=filtered_events['xT_value'], cmap='viridis', ax=axs['pitch'])
     
     pitch.scatter(filtered_events.end_x, filtered_events.end_y,
-                    ax=axs['pitch'], color=colour_success, s=15)
+                    ax=axs['pitch'], c=filtered_events['xT_value'], cmap='viridis', s=15)
+
+        # Add a color bar
+    cbar = plt.colorbar(sc, ax=axs['pitch'])
+    cbar.set_label('xT Value')
   
   elif ((selected_type_name == 'Most Dangerous Carries')):
     filtered_events = events_df[(events_df['type_name'] == 'dribble') & (events_df['result_name'] == 'success')]
