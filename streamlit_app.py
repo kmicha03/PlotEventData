@@ -595,7 +595,7 @@ if len(selected_match_ids)>0:
                   ax=axs['pitch'], color=colour_success, s=15)
       
   elif ((selected_type_name == 'Goal Creating Actions')):
-    filtered_events = events_df[(events_df['goal_creating_action'] == 1) & (events_df['result_name'] == 'success') & (events_df['type_name'].isin(action)]
+    filtered_events = events_df[(events_df['goal_creating_action'] == 1) & (events_df['result_name'] == 'success') & (events_df['type_name'].isin(action))]
 
     markers_actions = ['bad_touch', 'clearance', 'foul', 'interception', 'keeper_pick_up', 'keeper_punch', 'tackle', 'take_on']
     lines_actions = ['corner_crossed', 'corner_short','dribble', 'cross', 'freekick_crossed', 'freekick_short', 'goalkick', 'pass', 'shot', 'shot_freekick', 'shot_penalty', 'throw_in']
