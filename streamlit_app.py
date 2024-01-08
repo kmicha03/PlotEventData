@@ -506,7 +506,7 @@ if len(selected_match_ids)>0:
                         lw=2, transparent=True, comet=True, label=f'Most Dangerous Passes (10)',
                         color=colour_success, ax=axs['pitch'])
     
-    pitch.scatter(filtered_events.end_x, filtered_events.end_y,
+    sc = pitch.scatter(filtered_events.end_x, filtered_events.end_y,
                     ax=axs['pitch'], c=filtered_events['xT_value'], cmap='viridis', s=15)
 
         # Add a color bar
