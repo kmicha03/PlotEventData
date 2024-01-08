@@ -504,7 +504,7 @@ if len(selected_match_ids)>0:
     pitch.lines(filtered_events.start_x, filtered_events.start_y,
                         filtered_events.end_x, filtered_events.end_y,
                         lw=2, transparent=True, comet=True, label=f'Most Dangerous Passes (10)',
-                        color=filtered_events['xT_value'], cmap='viridis', ax=axs['pitch'])
+                        color=colour_success, ax=axs['pitch'])
     
     pitch.scatter(filtered_events.end_x, filtered_events.end_y,
                     ax=axs['pitch'], c=filtered_events['xT_value'], cmap='viridis', s=15)
