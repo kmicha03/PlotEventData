@@ -266,7 +266,8 @@ if len(selected_match_ids)>0:
     situation = st.sidebar.multiselect("Select Situation Type", situations_types, situations_types)
 
   if (selected_type_name == 'Goal Creating Actions') | (selected_type_name == 'Shot Creating Actions'):
-    action_types = events_df['type_name'].unique().tolist()  
+    gca = events_df[events_df["goal_creating_action] == 1]
+    action_types = gca['type_name'].unique().tolist()  
     action = st.sidebar.multiselect("Select Action", action_types, action_types)
 
     
