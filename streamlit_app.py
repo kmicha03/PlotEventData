@@ -506,12 +506,25 @@ if len(selected_match_ids)>0:
                         lw=2, transparent=True, comet=True, label=f'Most Dangerous Passes (10)',
                         color=colour_success, ax=axs['pitch'])
     
-    sc = pitch.scatter(filtered_events.end_x, filtered_events.end_y,
+    pitch.scatter(filtered_events.end_x, filtered_events.end_y,
                     ax=axs['pitch'], c=filtered_events['xT_value'], cmap='viridis', s=15)
 
-        # Add a color bar
-    cbar = plt.colorbar(sc, ax=axs['pitch'])
-    cbar.set_label('xT Value')
+    norm = mpl.colors.Normalize(vmin=filtered_events['xT_value'].min(), vmax=filtered_events['xT_value'].max())
+
+    # Create a colorbar for the colormap
+    sm = plt.cm.ScalarMappable(cmap='viridis', norm=norm)  # Use cmap_success or cmap_fail as needed
+    sm.set_array([])
+
+    # Add the colorbar to the plot
+    cb = plt.colorbar(sm, ax=axs['endnote'], orientation='horizontal',aspect=80)
+    cb.set_label('xGOT', color = '#dee6ea' )   
+
+    # Change color of the colorbar's tick labels
+    cb.ax.xaxis.set_tick_params(color='#dee6ea')  # Change 'white' to any suitable color
+    cb.ax.xaxis.label.set_color('#dee6ea')  # Change 'white' to the color of your choice
+
+        # Additional: Change the color of the colorbar's ticks
+    plt.setp(plt.getp(cb.ax.axes, 'xticklabels'), color='#dee6ea')
   
   elif ((selected_type_name == 'Most Dangerous Carries')):
     filtered_events = events_df[(events_df['type_name'] == 'dribble') & (events_df['result_name'] == 'success')]
