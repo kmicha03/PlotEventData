@@ -241,7 +241,7 @@ if len(selected_match_ids)>0:
   unique_type_names = events_df['type_name'].unique().tolist()
 
   custom_metrics = ["Aerials","Open Play Assist","Set-Piece Assist","Most Dangerous Passes"
-                           ,"Attacking Third Passes", "Attacking Third Carries", "Progressive Passes","Progressive Carries","Goal Creating Actions","Shot Creating Actions"]
+                           ,"Attacking Third Passes", "Attacking Third Carries","Penalty Box Passes", "Penalty Box Carries", "Progressive Passes","Progressive Carries","Goal Creating Actions","Shot Creating Actions"]
   unique_type_names.extend(custom_metrics)
 
   if 'GK' not in selected_positions:
