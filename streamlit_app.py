@@ -354,7 +354,7 @@ if len(selected_match_ids)>0:
     label2 = f"Total xG: {filtered_events.expectedGoals.sum():.2f} - Total xGOT: {filtered_events.expectedGoalsOnTarget.sum():.2f}"
       
     texts = [label1, label2]
-    positions = [(33, 40), (33, 35)]  # Replace (x, y) with actual coordinates
+    positions = [(32, 40), (32, 35)]  # Replace (x, y) with actual coordinates
 
     # Add texts to the plot
     for text, position in zip(texts, positions):
