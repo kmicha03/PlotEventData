@@ -350,13 +350,11 @@ if len(selected_match_ids)>0:
     filtered_events['expectedGoals'].fillna(0,inplace=True)
     filtered_events['expectedGoalsOnTarget'].fillna(0,inplace=True)
 
-    total_goals = f"Total Goals: {len(filtered_events[filtered_events['result_name']=='success'])}"
-    total_shots = f"Total Shots: {len(filtered_events)}"
-    total_xG = f"Total xG: {filtered_events.expectedGoals.sum():.2f}"
-    total_xGOT = f"Total xGOT: {filtered_events.expectedGoalsOnTarget.sum():.2f}"
-
+    label1 = f"Total Goals: {len(filtered_events[filtered_events['result_name']=='success'])} - Total Shots: {len(filtered_events)}"
+    label2 = f"Total xG: {filtered_events.expectedGoals.sum():.2f} - Total xGOT: {filtered_events.expectedGoalsOnTarget.sum():.2f}"
+      
     texts = [total_shots, total_goals, total_xG, total_xGOT]
-    positions = [(33, 40), (33, 35), (33, 30), (33, 25)]  # Replace (x, y) with actual coordinates
+    positions = [(33, 40), (33, 35)]  # Replace (x, y) with actual coordinates
 
     # Add texts to the plot
     for text, position in zip(texts, positions):
