@@ -241,8 +241,7 @@ if len(selected_match_ids)>0:
   unique_type_names = events_df['type_name'].unique().tolist()
 
   custom_metrics = ["Aerials","Goal","Open Play Assist","Set-Piece Assist","Most Dangerous Passes"
-                           ,"Attacking Third Passes", "Attacking Third Carries", "Progressive Passes","Progressive Carries"]
-    #"Goal Creating Actions","Shot Creating Actions",
+                           ,"Attacking Third Passes", "Attacking Third Carries", "Progressive Passes","Progressive Carries","Goal Creating Actions","Shot Creating Actions"]
   unique_type_names.extend(custom_metrics)
 
   if 'GK' not in selected_positions:
@@ -600,6 +599,97 @@ if len(selected_match_ids)>0:
     
     pitch.scatter(filtered_events.end_x, filtered_events.end_y,
                   ax=axs['pitch'], color=colour_success, s=15)
+      
+  elif ((selected_type_name == 'Goal Creating Actions')):
+    filtered_events = events_df[(events_df['goal_creating_action'] == 1) & (events_df['result_name'] == 'success')]
+
+    markers_actions = ['bad_touch', 'clearance', 'foul', 'interception', 'keeper_pick_up', 'keeper_punch', 'tackle', 'take_on']
+    lines_actions = ['corner_crossed', 'corner_short','dribble', 'cross', 'freekick_crossed', 'freekick_short', 'goalkick', 'pass', 'shot', 'shot_freekick', 'shot_penalty', 'throw_in']
+
+      # Define marker shapes for each action
+    marker_shapes = {
+        'bad_touch': 's', 'clearance': '^', 'foul': 'v', 'interception': 'o',
+        'keeper_pick_up': 'p', 'keeper_punch': 'P', 'tackle': '*', 'take_on': 'X'
+    }
+
+    line_colors = {
+      'corner_crossed': 'blue', 'corner_short': 'green', 'dribble': 'red',
+      'cross': 'purple', 'freekick_crossed': 'orange', 'freekick_short': 'pink',
+      'goalkick': 'cyan', 'pass': 'brown', 'shot': 'gray',
+      'shot_freekick': 'lime', 'shot_penalty': 'yellow', 'throw_in': 'black'
+    }
+
+    added_labels = set()
+
+    for index, event in filtered_events.iterrows():
+
+        if event["type_name"] in markers_actions:
+            marker = marker_shapes.get(event["type_name"], 'o')  
+
+            if f'{event["type_name"]}' not in added_labels:
+              added_labels.add(f'{event["type_name"]}')
+              label = f'{event["type_name"].replace("_", " ").title()}'
+              pitch.scatter(event["start_x"], event["start_y"], ax=axs['pitch'], color=colour_success, s=15, label=label, marker=marker)
+            else:
+              pitch.scatter(event["start_x"], event["start_y"], ax=axs['pitch'], color=colour_success, s=15, marker=marker)
+
+        elif event["type_name"] in lines_actions:
+            color = line_colors.get(event["type_name"], colour_success)
+            pitch.scatter(event.end_x, event.end_y, ax=axs['pitch'], color=color, s=15)
+
+            if f'{event["type_name"]}' not in added_labels:
+              added_labels.add(f'{event["type_name"]}')
+              label = f'{event["type_name"].replace("_", " ").title()}'
+              pitch.lines(event["start_x"], event["start_y"], event["end_x"], event["end_y"],
+                        lw=2, transparent=True, comet=True, ax=axs['pitch'], label=label, color=color)
+            else:
+              pitch.lines(event["start_x"], event["start_y"], event["end_x"], event["end_y"],
+                        lw=2, transparent=True, comet=True, ax=axs['pitch'], color=color)
+  elif ((selected_type_name == 'Shot Creating Actions')):
+    filtered_events = events_df[(events_df['shot_creating_action'] == 1) & (events_df['result_name'] == 'success')]
+
+    markers_actions = ['bad_touch', 'clearance', 'foul', 'interception', 'keeper_pick_up', 'keeper_punch', 'tackle', 'take_on']
+    lines_actions = ['corner_crossed', 'corner_short','dribble', 'cross', 'freekick_crossed', 'freekick_short', 'goalkick', 'pass', 'shot', 'shot_freekick', 'shot_penalty', 'throw_in']
+
+      # Define marker shapes for each action
+    marker_shapes = {
+        'bad_touch': 's', 'clearance': '^', 'foul': 'v', 'interception': 'o',
+        'keeper_pick_up': 'p', 'keeper_punch': 'P', 'tackle': '*', 'take_on': 'X'
+    }
+
+    line_colors = {
+      'corner_crossed': 'blue', 'corner_short': 'green', 'dribble': 'red',
+      'cross': 'purple', 'freekick_crossed': 'orange', 'freekick_short': 'pink',
+      'goalkick': 'cyan', 'pass': 'brown', 'shot': 'gray',
+      'shot_freekick': 'lime', 'shot_penalty': 'yellow', 'throw_in': 'black'
+    }
+
+    added_labels = set()
+
+    for index, event in filtered_events.iterrows():
+
+        if event["type_name"] in markers_actions:
+            marker = marker_shapes.get(event["type_name"], 'o')  
+
+            if f'{event["type_name"]}' not in added_labels:
+              added_labels.add(f'{event["type_name"]}')
+              label = f'{event["type_name"].replace("_", " ").title()}'
+              pitch.scatter(event["start_x"], event["start_y"], ax=axs['pitch'], color=colour_success, s=15, label=label, marker=marker)
+            else:
+              pitch.scatter(event["start_x"], event["start_y"], ax=axs['pitch'], color=colour_success, s=15, marker=marker)
+
+        elif event["type_name"] in lines_actions:
+            color = line_colors.get(event["type_name"], colour_success)
+            pitch.scatter(event.end_x, event.end_y, ax=axs['pitch'], color=color, s=15)
+
+            if f'{event["type_name"]}' not in added_labels:
+              added_labels.add(f'{event["type_name"]}')
+              label = f'{event["type_name"].replace("_", " ").title()}'
+              pitch.lines(event["start_x"], event["start_y"], event["end_x"], event["end_y"],
+                        lw=2, transparent=True, comet=True, ax=axs['pitch'], label=label, color=color)
+            else:
+              pitch.lines(event["start_x"], event["start_y"], event["end_x"], event["end_y"],
+                        lw=2, transparent=True, comet=True, ax=axs['pitch'], color=color)
     
   #"Goal Creating Actions","Shot Creating Actions", "Progressive Passes","Progressive Carries",Most common pass clusters
     
