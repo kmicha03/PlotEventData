@@ -517,7 +517,7 @@ if len(selected_match_ids)>0:
 
     # Add the colorbar to the plot
     cb = plt.colorbar(sm, ax=axs['endnote'], orientation='horizontal',aspect=80)
-    cb.set_label('xGOT', color = '#dee6ea' )   
+    cb.set_label('xThreat', color = '#dee6ea' )   
 
     # Change color of the colorbar's tick labels
     cb.ax.xaxis.set_tick_params(color='#dee6ea')  # Change 'white' to any suitable color
