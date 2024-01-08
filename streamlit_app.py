@@ -615,7 +615,7 @@ if len(selected_match_ids)>0:
       'corner_crossed': 'blue', 'corner_short': 'green', 'dribble': 'red',
       'cross': 'purple', 'freekick_crossed': 'orange', 'freekick_short': 'pink',
       'goalkick': 'cyan', 'pass': 'brown', 'shot': 'gray',
-      'shot_freekick': 'lime', 'shot_penalty': 'yellow', 'throw_in': 'black'
+      'shot_freekick': 'lime', 'shot_penalty': 'yellow', 'throw_in': 'white'
     }
 
     added_labels = set()
@@ -660,7 +660,7 @@ if len(selected_match_ids)>0:
       'corner_crossed': 'blue', 'corner_short': 'green', 'dribble': 'red',
       'cross': 'purple', 'freekick_crossed': 'orange', 'freekick_short': 'pink',
       'goalkick': 'cyan', 'pass': 'brown', 'shot': 'gray',
-      'shot_freekick': 'lime', 'shot_penalty': 'yellow', 'throw_in': 'black'
+      'shot_freekick': 'lime', 'shot_penalty': 'yellow', 'throw_in': 'white'
     }
 
     added_labels = set()
