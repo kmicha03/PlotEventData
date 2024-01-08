@@ -779,5 +779,7 @@ with st.expander('Events Manual'):
       32. Aerials: Any action that was made with a player's head
       33. Goal Creating Actions (GCA): Any of the last two successful actions before a goal
       34. Shot Creating Actions (SCA): Any of the last two successful actions before a shot
+      35. Penalty Box Passes: Passes into the penalty box
+      36. Penalty Box Carries: Ball Carries into the penalty box
     ''')
 
