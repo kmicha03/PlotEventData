@@ -544,7 +544,51 @@ if len(selected_match_ids)>0:
     
     pitch.scatter(filtered_events.end_x, filtered_events.end_y,
                     ax=axs['pitch'], color=colour_success, s=15)
+  elif ((selected_type_name == 'Penalty Box Passes')):
+    pitch_length = 105
+    pitch_width = 68
+    penalty_box_length = 16.5  # Length of the penalty box
+    penalty_box_width = 40.3   # Width of the penalty box
     
+    filtered_events_penalty_box = events_df[
+        (events_df['type_name'] == 'pass') & 
+        (events_df['result_name'] == 'success') & 
+        (events_df['end_x'] >= (pitch_length - penalty_box_length)) & 
+        (events_df['end_x'] <= pitch_length) & 
+        (events_df['end_y'] >= ((pitch_width - penalty_box_width) / 2)) & 
+        (events_df['end_y'] <= ((pitch_width + penalty_box_width) / 2))
+    ]
+
+    pitch.lines(filtered_events.start_x, filtered_events.start_y,
+                        filtered_events.end_x, filtered_events.end_y,
+                        lw=2, transparent=True, comet=True, label=f'Attacking Third Passes',
+                        color=colour_success, ax=axs['pitch'])
+    
+    pitch.scatter(filtered_events.end_x, filtered_events.end_y,
+                    ax=axs['pitch'], color=colour_success, s=15)
+  
+  elif ((selected_type_name == 'Penalty Box Carries')):
+    pitch_length = 105
+    pitch_width = 68
+    penalty_box_length = 16.5  # Length of the penalty box
+    penalty_box_width = 40.3   # Width of the penalty box
+    
+    filtered_events_penalty_box = events_df[
+        (events_df['type_name'] == 'dribble') & 
+        (events_df['result_name'] == 'success') & 
+        (events_df['end_x'] >= (pitch_length - penalty_box_length)) & 
+        (events_df['end_x'] <= pitch_length) & 
+        (events_df['end_y'] >= ((pitch_width - penalty_box_width) / 2)) & 
+        (events_df['end_y'] <= ((pitch_width + penalty_box_width) / 2))
+    ]
+      
+    pitch.lines(filtered_events.start_x, filtered_events.start_y,
+                        filtered_events.end_x, filtered_events.end_y,
+                        lw=2, transparent=True, comet=True, label=f'Attacking Third Carries',
+                        color=colour_success, ax=axs['pitch'])
+    
+    pitch.scatter(filtered_events.end_x, filtered_events.end_y,
+                    ax=axs['pitch'], color=colour_success, s=15)  
   elif ((selected_type_name == 'Progressive Passes')):
     # Constants for pitch halves
     own_half = 52.5
@@ -733,5 +777,7 @@ with st.expander('Events Manual'):
       30. Progressive Passes: A forward pass that attempts to advance a team significantly closer to the opponent’s goal (WyScout implementation)
       31. Progressive Carries: A forward carry that attempts to advance a team significantly closer to the opponent’s goal (WyScout implementation)
       32. Aerials: Any action that was made with a player's head
+      33. Goal Creating Actions (GCA): Any of the last two successful actions before a goal
+      34. Shot Creating Actions (SCA): Any of the last two successful actions before a shot
     ''')
 
