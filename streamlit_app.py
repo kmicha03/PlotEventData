@@ -7,6 +7,7 @@ import seaborn as sns
 import urllib.request
 from PIL import Image
 import matplotlib as mpl
+from matplotlib.colors import to_rgba
 
 
 import streamlit as st
@@ -25,9 +26,6 @@ from matplotlib.colors import LinearSegmentedColormap, Normalize
 from matplotlib import cm
 import matplotlib.gridspec as gridspec
 from matplotlib.font_manager import FontProperties
-
-
-from mplsoccer import VerticalPitch, create_transparent_cmap
 
 supabase_password = "Gamwtoapoel99!"
 project_url = "https://xkzfeabisrfkyotvpozu.supabase.co"
