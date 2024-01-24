@@ -349,6 +349,23 @@ if len(selected_match_ids)>0:
     # Create a dynamic title
     plot_title = f"{selected_team} - {selected_league}"
     plot_title2 = f"{matches_played} Matches Played - 2023/24"
+
+  if selected_type_name not in custom_metrics:
+    event_results = events_df[events_df["type_name"] == selected_type_name]['result_name'].unique().tolist()
+    event_result = st.sidebar.multiselect("Select Result Type", event_results, event_results)
+
+  if selected_type_name == 'shot':
+    situations_types = events_df['situation'].unique().tolist()  
+    situation = st.sidebar.multiselect("Select Situation Type", situations_types, situations_types)
+
+  if (selected_type_name == 'Goal Creating Actions'):
+    gca = events_df[(events_df["goal_creating_action"] == 1) & (events_df["result_name"] == 'success')]
+    action_types = gca['type_name'].unique().tolist()  
+    action = st.sidebar.multiselect("Select Action", action_types, action_types)
+  elif (selected_type_name == 'Shot Creating Actions'):
+    sca = events_df[(events_df["shot_creating_action"] == 1) & (events_df["result_name"] == 'success')]
+    action_types = sca['type_name'].unique().tolist()  
+    action = st.sidebar.multiselect("Select Action", action_types, action_types)
     
     # Create and customize the plot
   pitch = VerticalPitch(
