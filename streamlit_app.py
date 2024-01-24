@@ -7,7 +7,6 @@ import seaborn as sns
 import urllib.request
 from PIL import Image
 import matplotlib as mpl
-from matplotlib.colors import to_rgba
 
 
 import streamlit as st
@@ -27,15 +26,18 @@ from matplotlib import cm
 import matplotlib.gridspec as gridspec
 from matplotlib.font_manager import FontProperties
 
-supabase_password = st.secrets["db_password"]
-project_url = st.secrets["db_project_url"]
+
+from mplsoccer import VerticalPitch, create_transparent_cmap
+
+supabase_password = "Gamwtoapoel99!"
+project_url = "https://xkzfeabisrfkyotvpozu.supabase.co"
 
 conn = psycopg2.connect(
-    user=st.secrets["db_user"],
+    user="postgres",
     password=supabase_password,
-    host= st.secrets["db_host"],
-    port=st.secrets["db_port"],
-    database=st.secrets["db_name"]
+    host="db.xkzfeabisrfkyotvpozu.supabase.co",
+    port=5432,
+    database="postgres"
 )
 
 @st.cache_data
@@ -46,10 +48,8 @@ def get_available_leagues():
             Select
               name,id
             from
-              "leagues" l
-            where
-               l.active=1
-            order by l.order 
+              "leagues"
+            
         """)
 
     result = cursor.fetchall()
@@ -59,8 +59,7 @@ def get_available_leagues():
         return leagues
     else:
         return None
-        
-@st.cache_data    
+@st.cache_data   
 def get_league_teams(selected_league):
     league_id = league_mapping[selected_league]
     cursor = conn.cursor()
@@ -82,7 +81,6 @@ def get_league_teams(selected_league):
         return teams
     else:
         return None
-        
 @st.cache_data    
 def get_players(selected_team):
     team_id = teams_mapping[selected_team]
@@ -106,6 +104,8 @@ def get_players(selected_team):
         return df
     else:
         return None
+  
+
 
 available_leagues=get_available_leagues()
 
@@ -148,8 +148,36 @@ def load_matches(selected_player, selected_positions):
 
     return df
 
+@st.cache_data(hash_funcs={types.FunctionType: id})
+def load_matches_team(team):
+    
+    team_id = teams_mapping[team]
+
+    cursor = conn.cursor()
+
+    cursor.execute("""
+      select
+        m.date,
+        m.id,
+        t.name as home_team_name,
+        t2.name as away_team_name
+      from
+        "Matches" m
+        inner join "teams" t on m.home_team_id = t.id
+        inner join "teams" t2 on m.away_team_id = t2.id
+      where
+        m.home_team_id = %s or m.away_team_id = %s;
+      """, (team_id,team_id))
+
+    result = cursor.fetchall()
+
+    # Convert the result to a DataFrame
+    df = pd.DataFrame(result, columns=['date','match_id', 'home_team_name', 'away_team_name'])
+
+    return df
+
 # App title
-st.title("Football Analytics - Event Data")
+st.title("Football Analytics - Event Data by Opta")
 st.subheader('Created by Konstantinos Michail (@kmicha03)\nData from Opta')
 
 
@@ -165,6 +193,9 @@ with st.expander('Instructions'):
     ''')
 
 st.sidebar.header('Filters')
+
+team_or_player = st.sidebar.selectbox("Team/Player", ["Team","Player"])
+
 selected_league = st.sidebar.selectbox("Select a League", available_leagues)
 
 # Create a dictionary to map displayed names to actual values
@@ -177,30 +208,34 @@ available_teams = list(teams_mapping.keys())
 
 selected_team = st.sidebar.selectbox("Select a team", available_teams)
 
-players = get_players(selected_team)
+if team_or_player == "Player":
+  players = get_players(selected_team)
 
-# Group by player name and calculate the sum of minutes played
-player_minutes_df = players.groupby('player_name')['minutes_played'].sum()
+  # Group by player name and calculate the sum of minutes played
+  player_minutes_df = players.groupby('player_name')['minutes_played'].sum()
 
-# Resetting the index to get a clean DataFrame
-player_minutes_df = player_minutes_df.reset_index()
+  # Resetting the index to get a clean DataFrame
+  player_minutes_df = player_minutes_df.reset_index()
 
-# Use the displayed names for the dropdown
-available_players = players['player_name'].unique().tolist()
+  # Use the displayed names for the dropdown
+  available_players = players['player_name'].unique().tolist()
 
-selected_player = st.sidebar.selectbox("Select a player", available_players)
+  selected_player = st.sidebar.selectbox("Select a player", available_players)
 
-positions = players[players['player_name']==selected_player]['starting_position'].unique().tolist()
+  positions = players[players['player_name']==selected_player]['starting_position'].unique().tolist()
 
-selected_positions = st.sidebar.multiselect("Select player positions", positions, positions)
+  selected_positions = st.sidebar.multiselect("Select player positions", positions, positions)
 
-# Load and display data based on the selected league
-matches = load_matches(selected_player,selected_positions)
+  # Load and display data based on the selected league
+  matches = load_matches(selected_player,selected_positions)
 
+else:
+  matches = load_matches_team(selected_team)
+   
 # Create a new column 'Match' with the desired format
 matches['Match'] = matches['home_team_name'] + ' vs ' + matches['away_team_name'] + ' - ' + matches['date'].astype(str)
 
-# Extract the 'Match' column from the DataFrame as the options for multiselect
+  # Extract the 'Match' column from the DataFrame as the options for multiselect
 match_options = matches['Match'].tolist()
 
 selected_matches = st.sidebar.multiselect('Matches', match_options, match_options)
@@ -233,55 +268,87 @@ def get_player_events(selected_player, match_ids):
 
     return df
 
+@st.cache_data
+def get_teams_events(selected_teams, match_ids):
+    team_id = teams_mapping[selected_teams]
+    match_ids_tuple = tuple(match_ids)  # Convert list to tuple for SQL query
+
+    cursor = conn.cursor()
+
+    query = """
+        SELECT e.period_id, e.time_seconds, e.start_x, e.end_x, e.start_y, e.end_y,e.type_name,e.result_name,e.bodypart_name,e."xT_value",e.open_play_assist,e.set_piece_assist,e.goal_creating_action,e.shot_creating_action, e."expectedGoals", e."expectedGoalsOnTarget", e.situation
+        FROM "Events" e
+        WHERE "team_id" = %s AND "game_id" IN %s;
+    """
+
+    cursor.execute(query, (team_id, match_ids_tuple))
+
+    result = cursor.fetchall()
+
+    # Convert the result to a DataFrame
+    df = pd.DataFrame(result, columns=['period_id', 'time_seconds', 'start_x', 'end_x', 'start_y', 'end_y','type_name','result_name','bodypart_name','xT_value','open_play_assist','set_piece_assist','goal_creating_action','shot_creating_action','expectedGoals', 'expectedGoalsOnTarget', 'situation'])  # Add your columns here
+
+    return df
+
 # Call the function with the selected player and match IDs
 
 if len(selected_match_ids)>0:
-  events_df = get_player_events(selected_player, selected_match_ids)
-    
-  unique_type_names = events_df['type_name'].unique().tolist()
+  if team_or_player == "Player":
+    events_df = get_player_events(selected_player, selected_match_ids)
+    unique_type_names = events_df['type_name'].unique().tolist()
 
-  custom_metrics = ["Aerials","Open Play Assist","Set-Piece Assist","Most Dangerous Passes"
-                           ,"Attacking Third Passes", "Attacking Third Carries","Penalty Box Passes", "Penalty Box Carries", "Progressive Passes","Progressive Carries","Goal Creating Actions","Shot Creating Actions"]
-  unique_type_names.extend(custom_metrics)
+    if 'GK' not in selected_positions:
+    # Filter out event types starting with "keeper"
+      unique_type_names = [event for event in unique_type_names if not event.startswith('keeper')]
 
-  if 'GK' not in selected_positions:
-        # Filter out event types starting with "keeper"
-        unique_type_names = [event for event in unique_type_names if not event.startswith('keeper')]
-      
-  # Generate human-readable names for the event types
-  unique_type_names_readable = [name.replace('_', ' ').title() for name in unique_type_names]
+    custom_metrics = ["Goal","Open Play Assist","Set-Piece Assist","Goal Creating Actions","Shot Creating Actions","Most Dangerous Passes"
+                           ,"Attacking Third Passes", "Attacking Third Carries", "Progressive Passes","Progressive Carries"]
 
-  # Create a mapping from the readable names back to the original technical names
-  type_name_mapping = dict(zip(unique_type_names_readable, unique_type_names))
+    unique_type_names.extend(custom_metrics)
+    # Generate human-readable names for the event types
+    unique_type_names_readable = [name.replace('_', ' ').title() for name in unique_type_names]
 
-  selected_type_name_readable = st.sidebar.selectbox("Select an Event Type", unique_type_names_readable)
-  selected_type_name = type_name_mapping[selected_type_name_readable]
+    # Create a mapping from the readable names back to the original technical names
+    type_name_mapping = dict(zip(unique_type_names_readable, unique_type_names))
 
-  if selected_type_name not in custom_metrics:
+    selected_type_name_readable = st.sidebar.selectbox("Select an Event Type", unique_type_names_readable)
+    selected_type_name = type_name_mapping[selected_type_name_readable]
+
     event_results = events_df[events_df["type_name"] == selected_type_name]['result_name'].unique().tolist()
     event_result = st.sidebar.multiselect("Select Result Type", event_results, event_results)
 
-  if selected_type_name == 'shot':
-    situations_types = events_df['situation'].unique().tolist()  
-    situation = st.sidebar.multiselect("Select Situation Type", situations_types, situations_types)
-
-  if (selected_type_name == 'Goal Creating Actions'):
-    gca = events_df[(events_df["goal_creating_action"] == 1) & (events_df["result_name"] == 'success')]
-    action_types = gca['type_name'].unique().tolist()  
-    action = st.sidebar.multiselect("Select Action", action_types, action_types)
-  elif (selected_type_name == 'Shot Creating Actions'):
-    sca = events_df[(events_df["shot_creating_action"] == 1) & (events_df["result_name"] == 'success')]
-    action_types = sca['type_name'].unique().tolist()  
-    action = st.sidebar.multiselect("Select Action", action_types, action_types)
-
-    
-  minutes_played = player_minutes_df[player_minutes_df["player_name"] == selected_player]["minutes_played"].iloc[0]
-  event_type_correct_name = selected_type_name.replace('_', ' ').title()
-  selected_positions_correct_name = ','.join(selected_positions)
+    minutes_played = player_minutes_df[player_minutes_df["player_name"] == selected_player]["minutes_played"].iloc[0]
+    event_type_correct_name = selected_type_name.replace('_', ' ').title()
+    selected_positions_correct_name = ','.join(selected_positions)
     # Create a dynamic title
-  plot_title = f"{selected_player} ({selected_positions_correct_name}) - {selected_team}"
-  plot_title2 = f"{minutes_played} Minutes Played - 2023/24"
-    #st.title(plot_title)
+    plot_title = f"{selected_player} ({selected_positions_correct_name}) - {selected_team}"
+    plot_title2 = f"{minutes_played} Minutes Played - 2023/24"
+  else:
+    events_df = get_teams_events(selected_team, selected_match_ids)
+    unique_type_names = events_df['type_name'].unique().tolist()
+
+    custom_metrics = ["Goal","Open Play Assist","Set-Piece Assist","Goal Creating Actions","Shot Creating Actions","Most Dangerous Passes"
+                           ,"Attacking Third Passes", "Attacking Third Carries", "Progressive Passes","Progressive Carries"]
+
+    unique_type_names.extend(custom_metrics)
+    # Generate human-readable names for the event types
+    unique_type_names_readable = [name.replace('_', ' ').title() for name in unique_type_names]
+
+    # Create a mapping from the readable names back to the original technical names
+    type_name_mapping = dict(zip(unique_type_names_readable, unique_type_names))
+
+    selected_type_name_readable = st.sidebar.selectbox("Select an Event Type", unique_type_names_readable)
+    selected_type_name = type_name_mapping[selected_type_name_readable]
+
+    event_results = events_df[events_df["type_name"] == selected_type_name]['result_name'].unique().tolist()
+    event_result = st.sidebar.multiselect("Select Result Type", event_results, event_results)
+
+    event_type_correct_name = selected_type_name.replace('_', ' ').title()
+
+    matches_played = len(matches)
+    # Create a dynamic title
+    plot_title = f"{selected_team} - {selected_league}"
+    plot_title2 = f"{matches_played} Matches Played - 2023/24"
     
     # Create and customize the plot
   pitch = VerticalPitch(
