@@ -314,9 +314,6 @@ if len(selected_match_ids)>0:
     selected_type_name_readable = st.sidebar.selectbox("Select an Event Type", unique_type_names_readable)
     selected_type_name = type_name_mapping[selected_type_name_readable]
 
-    event_results = events_df[events_df["type_name"] == selected_type_name]['result_name'].unique().tolist()
-    event_result = st.sidebar.multiselect("Select Result Type", event_results, event_results)
-
     minutes_played = player_minutes_df[player_minutes_df["player_name"] == selected_player]["minutes_played"].iloc[0]
     event_type_correct_name = selected_type_name.replace('_', ' ').title()
     selected_positions_correct_name = ','.join(selected_positions)
@@ -339,10 +336,7 @@ if len(selected_match_ids)>0:
 
     selected_type_name_readable = st.sidebar.selectbox("Select an Event Type", unique_type_names_readable)
     selected_type_name = type_name_mapping[selected_type_name_readable]
-
-    event_results = events_df[events_df["type_name"] == selected_type_name]['result_name'].unique().tolist()
-    event_result = st.sidebar.multiselect("Select Result Type", event_results, event_results)
-
+      
     event_type_correct_name = selected_type_name.replace('_', ' ').title()
 
     matches_played = len(matches)
