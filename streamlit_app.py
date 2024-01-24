@@ -299,7 +299,7 @@ if len(selected_match_ids)>0:
     # Filter out event types starting with "keeper"
       unique_type_names = [event for event in unique_type_names if not event.startswith('keeper')]
 
-    custom_metrics = ["Goal","Open Play Assist","Set-Piece Assist","Goal Creating Actions","Shot Creating Actions","Most Dangerous Passes"
+    custom_metrics = ["Open Play Assist","Set-Piece Assist","Goal Creating Actions","Shot Creating Actions","Most Dangerous Passes"
                            ,"Attacking Third Passes", "Attacking Third Carries", "Progressive Passes","Progressive Carries"]
 
     unique_type_names.extend(custom_metrics)
@@ -322,7 +322,7 @@ if len(selected_match_ids)>0:
     events_df = get_teams_events(selected_team, selected_match_ids)
     unique_type_names = events_df['type_name'].unique().tolist()
 
-    custom_metrics = ["Goal","Open Play Assist","Set-Piece Assist","Goal Creating Actions","Shot Creating Actions","Most Dangerous Passes"
+    custom_metrics = ["Open Play Assist","Set-Piece Assist","Goal Creating Actions","Shot Creating Actions","Most Dangerous Passes"
                            ,"Attacking Third Passes", "Attacking Third Carries", "Progressive Passes","Progressive Carries"]
 
     unique_type_names.extend(custom_metrics)
