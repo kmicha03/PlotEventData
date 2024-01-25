@@ -393,7 +393,6 @@ def get_unique_type_names():
     else:
         return []
 
-
 # Call the function with the selected player and match IDs
 
 if len(selected_match_ids)>0:
@@ -516,8 +515,6 @@ if len(selected_match_ids)>0:
         pitch_length=105, 
         pitch_width=68 
     )
-    
-    #robotto_regular = FontManager()
     
   fig, axs = pitch.grid(endnote_height=0.03, endnote_space=0,
                       title_height=0.08, title_space=0,
