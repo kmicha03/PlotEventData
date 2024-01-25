@@ -27,15 +27,14 @@ from matplotlib import cm
 import matplotlib.gridspec as gridspec
 from matplotlib.font_manager import FontProperties
 
-supabase_password = "Gamwtoapoel99!"
-project_url = "https://xkzfeabisrfkyotvpozu.supabase.co"
+project_url = st.secrets["db_project_url"]
 
 conn = psycopg2.connect(
-    user="postgres",
-    password=supabase_password,
-    host="db.xkzfeabisrfkyotvpozu.supabase.co",
-    port=5432,
-    database="postgres"
+    user=st.secrets["db_user"],
+    password=st.secrets["db_password"],
+    host=st.secrets["db_host"],
+    port=st.secrets["db_port"],
+    database=st.secrets["db_name"]
 )
 
 @st.cache_data
@@ -246,7 +245,7 @@ match_id_mapping = {row['Match']: row['match_id'] for index, row in matches.iter
 selected_match_ids = [match_id_mapping[match] for match in selected_matches]
 
 @st.cache_data
-def get_player_events(selected_player, match_ids):
+def get_player_events(selected_player, match_ids,selected_type_name):
     player_id = str(players[players['player_name'] == selected_player]["player_id"].iloc[0])
     match_ids_tuple = tuple(match_ids)  # Convert list to tuple for SQL query
 
@@ -255,10 +254,10 @@ def get_player_events(selected_player, match_ids):
     query = """
         SELECT e.period_id, e.time_seconds, e.start_x, e.end_x, e.start_y, e.end_y,e.type_name,e.result_name,e.bodypart_name,e."xT_value",e.open_play_assist,e.set_piece_assist,e.goal_creating_action,e.shot_creating_action, e."expectedGoals", e."expectedGoalsOnTarget", e.situation
         FROM "Events" e
-        WHERE "player_id" = %s AND "game_id" IN %s;
+        WHERE "player_id" = %s AND "game_id" IN %s AND "type_name" = %s;
     """
 
-    cursor.execute(query, (player_id, match_ids_tuple))
+    cursor.execute(query, (player_id, match_ids_tuple,selected_type_name))
 
     result = cursor.fetchall()
 
@@ -268,7 +267,7 @@ def get_player_events(selected_player, match_ids):
     return df
 
 @st.cache_data
-def get_teams_events(selected_teams, match_ids):
+def get_teams_events(selected_teams, match_ids,selected_type_name):
     team_id = teams_mapping[selected_teams]
     match_ids_tuple = tuple(match_ids)  # Convert list to tuple for SQL query
 
@@ -277,10 +276,10 @@ def get_teams_events(selected_teams, match_ids):
     query = """
         SELECT e.period_id, e.time_seconds, e.start_x, e.end_x, e.start_y, e.end_y,e.type_name,e.result_name,e.bodypart_name,e."xT_value",e.open_play_assist,e.set_piece_assist,e.goal_creating_action,e.shot_creating_action, e."expectedGoals", e."expectedGoalsOnTarget", e.situation
         FROM "Events" e
-        WHERE "team_id" = %s AND "game_id" IN %s;
+        WHERE "team_id" = %s AND "game_id" IN %s AND "type_name" = %s;
     """
 
-    cursor.execute(query, (team_id, match_ids_tuple))
+    cursor.execute(query, (team_id, match_ids_tuple,selected_type_name))
 
     result = cursor.fetchall()
 
@@ -289,12 +288,30 @@ def get_teams_events(selected_teams, match_ids):
 
     return df
 
+@st.cache_data
+def get_unique_type_names():
+    cursor = conn.cursor()
+
+    cursor.execute("""
+            select distinct type_name
+            from "Events"
+        """)
+
+    result = cursor.fetchall()
+    
+    if result:
+        types = [types[0] for types in result]
+        return types
+    else:
+        return []
+
 # Call the function with the selected player and match IDs
 
 if len(selected_match_ids)>0:
+
+  unique_type_names = get_unique_type_names()
+
   if team_or_player == "Player":
-    events_df = get_player_events(selected_player, selected_match_ids)
-    unique_type_names = events_df['type_name'].unique().tolist()
 
     if 'GK' not in selected_positions:
     # Filter out event types starting with "keeper"
@@ -313,15 +330,18 @@ if len(selected_match_ids)>0:
     selected_type_name_readable = st.sidebar.selectbox("Select an Event Type", unique_type_names_readable)
     selected_type_name = type_name_mapping[selected_type_name_readable]
 
+    events_df = get_player_events(selected_player, selected_match_ids,selected_type_name)
+
     minutes_played = player_minutes_df[player_minutes_df["player_name"] == selected_player]["minutes_played"].iloc[0]
     event_type_correct_name = selected_type_name.replace('_', ' ').title()
     selected_positions_correct_name = ','.join(selected_positions)
     # Create a dynamic title
     plot_title = f"{selected_player} ({selected_positions_correct_name}) - {selected_team}"
     plot_title2 = f"{minutes_played} Minutes Played - 2023/24"
+
+
   else:
-    events_df = get_teams_events(selected_team, selected_match_ids)
-    unique_type_names = events_df['type_name'].unique().tolist()
+    #events_df = get_teams_events(selected_team, selected_match_ids)
 
     custom_metrics = ["Open Play Assist","Set-Piece Assist","Goal Creating Actions","Shot Creating Actions","Most Dangerous Passes"
                            ,"Attacking Third Passes", "Attacking Third Carries", "Progressive Passes","Progressive Carries"]
@@ -335,13 +355,15 @@ if len(selected_match_ids)>0:
 
     selected_type_name_readable = st.sidebar.selectbox("Select an Event Type", unique_type_names_readable)
     selected_type_name = type_name_mapping[selected_type_name_readable]
-      
     event_type_correct_name = selected_type_name.replace('_', ' ').title()
+
+    events_df = get_teams_events(selected_team, selected_match_ids,selected_type_name)
 
     matches_played = len(matches)
     # Create a dynamic title
     plot_title = f"{selected_team} - {selected_league}"
     plot_title2 = f"{matches_played} Matches Played - 2023/24"
+  
 
   if selected_type_name not in custom_metrics:
     event_results = events_df[events_df["type_name"] == selected_type_name]['result_name'].unique().tolist()
