@@ -419,27 +419,27 @@ if len(selected_match_ids)>0:
     selected_type_name = type_name_mapping[selected_type_name_readable]
 
     if (selected_type_name == 'Goal Creating Actions'):
-      events_df = get_player_events_special_actions(selected_team, selected_match_ids,"goal_creating_action")
+      events_df = get_player_events_special_actions(selected_player, selected_match_ids,"goal_creating_action")
       gca = events_df[(events_df["goal_creating_action"] == 1) & (events_df["result_name"] == 'success')]
       action_types = gca['type_name'].unique().tolist()  
       action = st.sidebar.multiselect("Select Action", action_types, action_types)
     elif (selected_type_name == 'Shot Creating Actions'):
-      events_df = get_player_events_special_actions(selected_team, selected_match_ids,"shot_creating_action")
+      events_df = get_player_events_special_actions(selected_player, selected_match_ids,"shot_creating_action")
       sca = events_df[(events_df["shot_creating_action"] == 1) & (events_df["result_name"] == 'success')]
       action_types = sca['type_name'].unique().tolist()  
       action = st.sidebar.multiselect("Select Action", action_types, action_types)
     elif (selected_type_name == 'Aerials'):
-      events_df = get_player_events_aerials(selected_team, selected_match_ids,"head")
+      events_df = get_player_events_aerials(selected_player, selected_match_ids,"head")
     elif (selected_type_name == 'Open Play Assist'):
-      events_df = get_player_events_special_actions(selected_team, selected_match_ids,"open_play_assist")
+      events_df = get_player_events_special_actions(selected_player, selected_match_ids,"open_play_assist")
     elif (selected_type_name == 'Set-Piece Assist'):
-      events_df = get_player_events_special_actions(selected_team, selected_match_ids,"set_piece_assist")
+      events_df = get_player_events_special_actions(selected_player, selected_match_ids,"set_piece_assist")
     elif ((selected_type_name == 'Most Dangerous Passes') | (selected_type_name == 'Attacking Third Passes') | (selected_type_name == 'Penalty Box Passes') | (selected_type_name == 'Progressive Passes')):
-      events_df = get_player_events(selected_team, selected_match_ids,"pass")
+      events_df = get_player_events(selected_player, selected_match_ids,"pass")
     elif ((selected_type_name == 'Most Dangerous Carries') | (selected_type_name == 'Attacking Third Carries') | (selected_type_name == 'Penalty Box Carries') | (selected_type_name == 'Progressive Carries')):
-      events_df = get_player_events(selected_team, selected_match_ids,"dribble")
+      events_df = get_player_events(selected_player, selected_match_ids,"dribble")
     else:
-      events_df = get_player_events(selected_team, selected_match_ids,"selected_type_name")
+      events_df = get_player_events(selected_player, selected_match_ids,"selected_type_name")
 
 
 
