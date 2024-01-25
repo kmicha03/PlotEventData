@@ -317,8 +317,8 @@ if len(selected_match_ids)>0:
     # Filter out event types starting with "keeper"
       unique_type_names = [event for event in unique_type_names if not event.startswith('keeper')]
 
-    custom_metrics = ["Open Play Assist","Set-Piece Assist","Goal Creating Actions","Shot Creating Actions","Most Dangerous Passes"
-                           ,"Attacking Third Passes", "Attacking Third Carries", "Progressive Passes","Progressive Carries"]
+    custom_metrics = ["Aerials","Open Play Assist","Set-Piece Assist","Goal Creating Actions","Shot Creating Actions","Most Dangerous Passes"
+                           ,"Attacking Third Passes", "Attacking Third Carries", "Progressive Passes","Progressive Carries","Penalty Box Passes","Penalty Box Carries"]
 
     unique_type_names.extend(custom_metrics)
     # Generate human-readable names for the event types
@@ -330,7 +330,30 @@ if len(selected_match_ids)>0:
     selected_type_name_readable = st.sidebar.selectbox("Select an Event Type", unique_type_names_readable)
     selected_type_name = type_name_mapping[selected_type_name_readable]
 
-    events_df = get_player_events(selected_player, selected_match_ids,selected_type_name)
+    if (selected_type_name == 'Goal Creating Actions'):
+      events_df = get_player_events_special_actions(selected_team, selected_match_ids,"goal_creating_action")
+      gca = events_df[(events_df["goal_creating_action"] == 1) & (events_df["result_name"] == 'success')]
+      action_types = gca['type_name'].unique().tolist()  
+      action = st.sidebar.multiselect("Select Action", action_types, action_types)
+    elif (selected_type_name == 'Shot Creating Actions'):
+      events_df = get_player_events_special_actions(selected_team, selected_match_ids,"shot_creating_action")
+      sca = events_df[(events_df["shot_creating_action"] == 1) & (events_df["result_name"] == 'success')]
+      action_types = sca['type_name'].unique().tolist()  
+      action = st.sidebar.multiselect("Select Action", action_types, action_types)
+    elif (selected_type_name == 'Aerials'):
+      events_df = get_player_events_aerials(selected_team, selected_match_ids,"head")
+    elif (selected_type_name == 'Open Play Assist'):
+      events_df = get_player_events_special_actions(selected_team, selected_match_ids,"open_play_assist")
+    elif (selected_type_name == 'Set-Piece Assist'):
+      events_df = get_player_events_special_actions(selected_team, selected_match_ids,"set_piece_assist")
+    elif ((selected_type_name == 'Most Dangerous Passes') | (selected_type_name == 'Attacking Third Passes') | (selected_type_name == 'Penalty Box Passes') | (selected_type_name == 'Progressive Passes')):
+      events_df = get_player_events(selected_team, selected_match_ids,"pass")
+    elif ((selected_type_name == 'Most Dangerous Carries') | (selected_type_name == 'Attacking Third Carries') | (selected_type_name == 'Penalty Box Carries') | (selected_type_name == 'Progressive Carries')):
+      events_df = get_player_events(selected_team, selected_match_ids,"dribble")
+    else:
+      events_df = get_player_events(selected_team, selected_match_ids,"selected_type_name")
+
+
 
     minutes_played = player_minutes_df[player_minutes_df["player_name"] == selected_player]["minutes_played"].iloc[0]
     event_type_correct_name = selected_type_name.replace('_', ' ').title()
@@ -343,8 +366,8 @@ if len(selected_match_ids)>0:
   else:
     #events_df = get_teams_events(selected_team, selected_match_ids)
 
-    custom_metrics = ["Open Play Assist","Set-Piece Assist","Goal Creating Actions","Shot Creating Actions","Most Dangerous Passes"
-                           ,"Attacking Third Passes", "Attacking Third Carries", "Progressive Passes","Progressive Carries"]
+    custom_metrics = ["Aerials","Open Play Assist","Set-Piece Assist","Goal Creating Actions","Shot Creating Actions","Most Dangerous Passes"
+                           ,"Attacking Third Passes", "Attacking Third Carries", "Progressive Passes","Progressive Carries","Penalty Box Passes","Penalty Box Carries"]
 
     unique_type_names.extend(custom_metrics)
     # Generate human-readable names for the event types
@@ -357,7 +380,28 @@ if len(selected_match_ids)>0:
     selected_type_name = type_name_mapping[selected_type_name_readable]
     event_type_correct_name = selected_type_name.replace('_', ' ').title()
 
-    events_df = get_teams_events(selected_team, selected_match_ids,selected_type_name)
+    if (selected_type_name == 'Goal Creating Actions'):
+      events_df = get_teams_events_special_actions(selected_team, selected_match_ids,"goal_creating_action")
+      gca = events_df[(events_df["goal_creating_action"] == 1) & (events_df["result_name"] == 'success')]
+      action_types = gca['type_name'].unique().tolist()  
+      action = st.sidebar.multiselect("Select Action", action_types, action_types)
+    elif (selected_type_name == 'Shot Creating Actions'):
+      events_df = get_teams_events_special_actions(selected_team, selected_match_ids,"shot_creating_action")
+      sca = events_df[(events_df["shot_creating_action"] == 1) & (events_df["result_name"] == 'success')]
+      action_types = sca['type_name'].unique().tolist()  
+      action = st.sidebar.multiselect("Select Action", action_types, action_types)
+    elif (selected_type_name == 'Aerials'):
+      events_df = get_teams_events_aerials(selected_team, selected_match_ids,"head")
+    elif (selected_type_name == 'Open Play Assist'):
+      events_df = get_teams_events_special_actions(selected_team, selected_match_ids,"open_play_assist")
+    elif (selected_type_name == 'Set-Piece Assist'):
+      events_df = get_teams_events_special_actions(selected_team, selected_match_ids,"set_piece_assist")
+    elif ((selected_type_name == 'Most Dangerous Passes') | (selected_type_name == 'Attacking Third Passes') | (selected_type_name == 'Penalty Box Passes') | (selected_type_name == 'Progressive Passes')):
+      events_df = get_teams_events(selected_team, selected_match_ids,"pass")
+    elif ((selected_type_name == 'Most Dangerous Carries') | (selected_type_name == 'Attacking Third Carries') | (selected_type_name == 'Penalty Box Carries') | (selected_type_name == 'Progressive Carries')):
+      events_df = get_teams_events(selected_team, selected_match_ids,"dribble")
+    else:
+      events_df = get_teams_events(selected_team, selected_match_ids,"selected_type_name")
 
     matches_played = len(matches)
     # Create a dynamic title
@@ -372,15 +416,6 @@ if len(selected_match_ids)>0:
   if selected_type_name == 'shot':
     situations_types = events_df['situation'].unique().tolist()  
     situation = st.sidebar.multiselect("Select Situation Type", situations_types, situations_types)
-
-  if (selected_type_name == 'Goal Creating Actions'):
-    gca = events_df[(events_df["goal_creating_action"] == 1) & (events_df["result_name"] == 'success')]
-    action_types = gca['type_name'].unique().tolist()  
-    action = st.sidebar.multiselect("Select Action", action_types, action_types)
-  elif (selected_type_name == 'Shot Creating Actions'):
-    sca = events_df[(events_df["shot_creating_action"] == 1) & (events_df["result_name"] == 'success')]
-    action_types = sca['type_name'].unique().tolist()  
-    action = st.sidebar.multiselect("Select Action", action_types, action_types)
     
     # Create and customize the plot
   pitch = VerticalPitch(
