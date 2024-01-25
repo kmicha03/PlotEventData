@@ -267,6 +267,49 @@ def get_player_events(selected_player, match_ids,selected_type_name):
     return df
 
 @st.cache_data
+def get_player_events_aerials(selected_teams, match_ids,selected_type_name):
+    player_id = str(players[players['player_name'] == selected_player]["player_id"].iloc[0])
+    match_ids_tuple = tuple(match_ids)  # Convert list to tuple for SQL query
+
+    cursor = conn.cursor()
+
+    query = """
+        SELECT e.period_id, e.time_seconds, e.start_x, e.end_x, e.start_y, e.end_y,e.type_name,e.result_name,e.bodypart_name,e."xT_value",e.open_play_assist,e.set_piece_assist,e.goal_creating_action,e.shot_creating_action, e."expectedGoals", e."expectedGoalsOnTarget", e.situation
+        FROM "Events" e
+        WHERE "player_id" = %s AND "game_id" IN %s AND "bodypart_name" = %s;
+    """
+
+    cursor.execute(query, (player_id, match_ids_tuple,selected_type_name))
+
+    result = cursor.fetchall()
+
+    # Convert the result to a DataFrame
+    df = pd.DataFrame(result, columns=['period_id', 'time_seconds', 'start_x', 'end_x', 'start_y', 'end_y','type_name','result_name','bodypart_name','xT_value','open_play_assist','set_piece_assist','goal_creating_action','shot_creating_action','expectedGoals', 'expectedGoalsOnTarget', 'situation'])  # Add your columns here
+
+    return df
+@st.cache_data
+def get_player_events_special_actions(selected_player, match_ids,selected_type_name):
+    player_id = str(players[players['player_name'] == selected_player]["player_id"].iloc[0])
+    match_ids_tuple = tuple(match_ids)  # Convert list to tuple for SQL query
+
+    cursor = conn.cursor()
+
+    query = """
+        SELECT e.period_id, e.time_seconds, e.start_x, e.end_x, e.start_y, e.end_y,e.type_name,e.result_name,e.bodypart_name,e."xT_value",e.open_play_assist,e.set_piece_assist,e.goal_creating_action,e.shot_creating_action, e."expectedGoals", e."expectedGoalsOnTarget", e.situation
+        FROM "Events" e
+        WHERE "player_id" = %s AND "game_id" IN %s AND {} = 1;
+    """.format(selected_type_name)
+
+    cursor.execute(query, (player_id, match_ids_tuple))
+
+    result = cursor.fetchall()
+
+    # Convert the result to a DataFrame
+    df = pd.DataFrame(result, columns=['period_id', 'time_seconds', 'start_x', 'end_x', 'start_y', 'end_y','type_name','result_name','bodypart_name','xT_value','open_play_assist','set_piece_assist','goal_creating_action','shot_creating_action','expectedGoals', 'expectedGoalsOnTarget', 'situation'])  # Add your columns here
+
+    return df
+
+@st.cache_data
 def get_teams_events(selected_teams, match_ids,selected_type_name):
     team_id = teams_mapping[selected_teams]
     match_ids_tuple = tuple(match_ids)  # Convert list to tuple for SQL query
@@ -280,6 +323,51 @@ def get_teams_events(selected_teams, match_ids,selected_type_name):
     """
 
     cursor.execute(query, (team_id, match_ids_tuple,selected_type_name))
+
+    result = cursor.fetchall()
+
+    # Convert the result to a DataFrame
+    df = pd.DataFrame(result, columns=['period_id', 'time_seconds', 'start_x', 'end_x', 'start_y', 'end_y','type_name','result_name','bodypart_name','xT_value','open_play_assist','set_piece_assist','goal_creating_action','shot_creating_action','expectedGoals', 'expectedGoalsOnTarget', 'situation'])  # Add your columns here
+
+    return df
+
+@st.cache_data
+def get_teams_events_aerials(selected_teams, match_ids,selected_type_name):
+    team_id = teams_mapping[selected_teams]
+    match_ids_tuple = tuple(match_ids)  # Convert list to tuple for SQL query
+
+    cursor = conn.cursor()
+
+    query = """
+        SELECT e.period_id, e.time_seconds, e.start_x, e.end_x, e.start_y, e.end_y,e.type_name,e.result_name,e.bodypart_name,e."xT_value",e.open_play_assist,e.set_piece_assist,e.goal_creating_action,e.shot_creating_action, e."expectedGoals", e."expectedGoalsOnTarget", e.situation
+        FROM "Events" e
+        WHERE "team_id" = %s AND "game_id" IN %s AND "bodypart_name" = %s;
+    """
+
+    cursor.execute(query, (team_id, match_ids_tuple,selected_type_name))
+
+    result = cursor.fetchall()
+
+    # Convert the result to a DataFrame
+    df = pd.DataFrame(result, columns=['period_id', 'time_seconds', 'start_x', 'end_x', 'start_y', 'end_y','type_name','result_name','bodypart_name','xT_value','open_play_assist','set_piece_assist','goal_creating_action','shot_creating_action','expectedGoals', 'expectedGoalsOnTarget', 'situation'])  # Add your columns here
+
+    return df
+
+@st.cache_data
+def get_teams_events_special_actions(selected_teams, match_ids,selected_type_name):
+    team_id = teams_mapping[selected_teams]
+    match_ids_tuple = tuple(match_ids)  # Convert list to tuple for SQL query
+
+    cursor = conn.cursor()
+
+    query = """
+        SELECT e.period_id, e.time_seconds, e.start_x, e.end_x, e.start_y, e.end_y, e.type_name, e.result_name, e.bodypart_name, e."xT_value", e.open_play_assist, e.set_piece_assist, e.goal_creating_action, e.shot_creating_action, e."expectedGoals", e."expectedGoalsOnTarget", e.situation
+        FROM "Events" e
+        WHERE "team_id" = %s AND "game_id" IN %s AND {} = 1;
+    """.format(selected_type_name)
+
+
+    cursor.execute(query, (team_id, match_ids_tuple))
 
     result = cursor.fetchall()
 
@@ -304,6 +392,7 @@ def get_unique_type_names():
         return types
     else:
         return []
+
 
 # Call the function with the selected player and match IDs
 
