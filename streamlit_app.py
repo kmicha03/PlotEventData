@@ -47,6 +47,7 @@ def get_available_leagues():
               name,id
             from
               "leagues"
+            order by order
             
         """)
 
