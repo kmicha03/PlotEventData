@@ -439,7 +439,7 @@ if len(selected_match_ids)>0:
     elif ((selected_type_name == 'Most Dangerous Carries') | (selected_type_name == 'Attacking Third Carries') | (selected_type_name == 'Penalty Box Carries') | (selected_type_name == 'Progressive Carries')):
       events_df = get_player_events(selected_player, selected_match_ids,"dribble")
     else:
-      events_df = get_player_events(selected_player, selected_match_ids,"selected_type_name")
+      events_df = get_player_events(selected_player, selected_match_ids,selected_type_name)
 
 
 
@@ -489,7 +489,7 @@ if len(selected_match_ids)>0:
     elif ((selected_type_name == 'Most Dangerous Carries') | (selected_type_name == 'Attacking Third Carries') | (selected_type_name == 'Penalty Box Carries') | (selected_type_name == 'Progressive Carries')):
       events_df = get_teams_events(selected_team, selected_match_ids,"dribble")
     else:
-      events_df = get_teams_events(selected_team, selected_match_ids,"selected_type_name")
+      events_df = get_teams_events(selected_team, selected_match_ids,selected_type_name)
 
     matches_played = len(matches)
     # Create a dynamic title
