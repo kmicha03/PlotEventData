@@ -451,7 +451,12 @@ if len(selected_match_ids)>0:
                     ax=axs['pitch'], color=colour_fail,s=15)
       
   elif ((selected_type_name == 'shot') | (selected_type_name == 'shot_freekick') ):
-    filtered_events = events_df[(events_df['type_name'] == selected_type_name) & (events_df['result_name'].isin(event_result)) & (events_df['situation'].isin(situation))]
+    
+    if selected_type_name == 'shot':
+      filtered_events = events_df[(events_df['type_name'] == selected_type_name) & (events_df['result_name'].isin(event_result)) & (events_df['situation'].isin(situation))]
+    else:
+      filtered_events = events_df[(events_df['type_name'] == selected_type_name) & (events_df['result_name'].isin(event_result))]  
+      
     mask_complete = filtered_events.result_name.isin(["success"])
     # Plot the completed passes
     # Plot the completed passes with line color based on expectedGoalsOnTarget
