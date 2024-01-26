@@ -405,7 +405,7 @@ if len(selected_match_ids)>0:
     # Filter out event types starting with "keeper"
       unique_type_names = [event for event in unique_type_names if not event.startswith('keeper')]
 
-    custom_metrics = ["Aerials","Open Play Assist","Set-Piece Assist","Goal Creating Actions","Shot Creating Actions","Most Dangerous Passes"
+    custom_metrics = ["Aerials","Open Play Assist","Set-Piece Assist","Goal Creating Actions","Shot Creating Actions","Most Dangerous Passes","Most Dangerous Carries"
                            ,"Attacking Third Passes", "Attacking Third Carries", "Progressive Passes","Progressive Carries","Penalty Box Passes","Penalty Box Carries"]
 
     unique_type_names.extend(custom_metrics)
@@ -716,9 +716,8 @@ if len(selected_match_ids)>0:
     
   elif ((selected_type_name == 'bad_touch') | (selected_type_name == 'foul')):
     filtered_events = events_df[(events_df['type_name'] == selected_type_name) & (events_df['result_name'].isin(event_result))]
-    mask_complete = filtered_events.result_name.isin(["success"])
 
-    pitch.scatter(filtered_events[mask_complete].start_x, filtered_events[mask_complete].start_y,
+    pitch.scatter(filtered_events.start_x, filtered_events.start_y,
                     ax=axs['pitch'], color=colour_fail, s=15, label = f"{event_type_correct_name}")
     
     label1 = f"Total {selected_type_name_readable}: {len(filtered_events)}"
