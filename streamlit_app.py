@@ -570,14 +570,26 @@ if len(selected_match_ids)>0:
     
     pitch.scatter(filtered_events[~mask_complete].end_x, filtered_events[~mask_complete].end_y,
                     ax=axs['pitch'], color=colour_fail,s=15)
+    
+  # Calculate the percentage of successful events
+    total_events = len(filtered_events)
+    successful_events = filtered_events[mask_complete].shape[0]
+    success_percentage = (successful_events / total_events) * 100
+
+    label1 = f"Total {selected_type_name_readable}: {total_events}"
+    label2 = f"Successful %: {success_percentage:.2f}%"
+
+    axs['endnote'].text(0, 0.8, f"{label1}", va='center', ha='left', fontsize=10,color='#dee6ea')
+    axs['endnote'].text(0, 0.2, f"{label2}", va='center', ha='left', fontsize=10,color='green')
+
       
   elif ((selected_type_name == 'shot') | (selected_type_name == 'shot_freekick') ):
-    
+
     if selected_type_name == 'shot':
       filtered_events = events_df[(events_df['type_name'] == selected_type_name) & (events_df['result_name'].isin(event_result)) & (events_df['situation'].isin(situation))]
     else:
-      filtered_events = events_df[(events_df['type_name'] == selected_type_name) & (events_df['result_name'].isin(event_result))]  
-      
+      filtered_events = events_df[(events_df['type_name'] == selected_type_name) & (events_df['result_name'].isin(event_result))]
+    
     mask_complete = filtered_events.result_name.isin(["success"])
     # Plot the completed passes
     # Plot the completed passes with line color based on expectedGoalsOnTarget
@@ -666,6 +678,10 @@ if len(selected_match_ids)>0:
     
     pitch.scatter(filtered_events[~mask_complete].end_x, filtered_events[~mask_complete].end_y,
                     ax=axs['pitch'], color=colour_fail,s=15)
+    
+    label1 = f"Total Carries: {len(filtered_events)}"
+
+    axs['endnote'].text(0, 0.8, f"{label1}", va='center', ha='left', fontsize=10,color='#dee6ea')
         
   elif ((selected_type_name == 'take_on') | (selected_type_name == 'keeper_claim')):
     filtered_events = events_df[(events_df['type_name'] == selected_type_name) & (events_df['result_name'].isin(event_result))]
@@ -675,6 +691,16 @@ if len(selected_match_ids)>0:
                     ax=axs['pitch'], color=colour_success,s=15, label=f"Successful {event_type_correct_name}")
     pitch.scatter(filtered_events[~mask_complete].start_x, filtered_events[~mask_complete].start_y,
                     ax=axs['pitch'], color=colour_fail,s=15, label = f"Unsuccessful {event_type_correct_name}")
+    
+    total_events = len(filtered_events)
+    successful_events = filtered_events[mask_complete].shape[0]
+    success_percentage = (successful_events / total_events) * 100
+
+    label1 = f"Total {selected_type_name_readable}: {total_events}"
+    label2 = f"Successful %: {success_percentage:.2f}%"
+
+    axs['endnote'].text(0, 0.8, f"{label1}", va='center', ha='left', fontsize=10,color='#dee6ea')
+    axs['endnote'].text(0, 0.2, f"{label2}", va='center', ha='left', fontsize=10,color='green')
         
   elif ((selected_type_name == 'interception') | (selected_type_name == 'clearance') | (selected_type_name == 'tackle') 
         | (selected_type_name == 'keeper_pick_up') | (selected_type_name == 'keeper_save') | (selected_type_name == 'keeper_punch')):
@@ -684,12 +710,20 @@ if len(selected_match_ids)>0:
     pitch.scatter(filtered_events[mask_complete].start_x, filtered_events[mask_complete].start_y,
                     ax=axs['pitch'], color=colour_success, s=15, label = f"Successful {event_type_correct_name}")
     
+    label1 = f"Total {selected_type_name_readable}: {len(filtered_events)}"
+
+    axs['endnote'].text(0, 0.8, f"{label1}", va='center', ha='left', fontsize=10,color='#dee6ea')
+    
   elif ((selected_type_name == 'bad_touch') | (selected_type_name == 'foul')):
     filtered_events = events_df[(events_df['type_name'] == selected_type_name) & (events_df['result_name'].isin(event_result))]
     mask_complete = filtered_events.result_name.isin(["success"])
 
     pitch.scatter(filtered_events[mask_complete].start_x, filtered_events[mask_complete].start_y,
                     ax=axs['pitch'], color=colour_fail, s=15, label = f"{event_type_correct_name}")
+    
+    label1 = f"Total {selected_type_name_readable}: {len(filtered_events)}"
+
+    axs['endnote'].text(0, 0.8, f"{label1}", va='center', ha='left', fontsize=10,color='#dee6ea')
       
   elif ((selected_type_name == 'Aerials')):
     filtered_events = events_df[(events_df['bodypart_name'] == 'head')]
@@ -699,6 +733,55 @@ if len(selected_match_ids)>0:
                     ax=axs['pitch'], color=colour_success,s=15, label=f"Successful {event_type_correct_name}")
     pitch.scatter(filtered_events[~mask_complete].start_x, filtered_events[~mask_complete].start_y,
                     ax=axs['pitch'], color=colour_fail,s=15, label = f"Unsuccessful {event_type_correct_name}")
+    
+    total_events = len(filtered_events)
+    successful_events = filtered_events[mask_complete].shape[0]
+    success_percentage = (successful_events / total_events) * 100
+
+    own_penalty_box_x_start = 0  # Update with your own values
+    own_penalty_box_x_end = 16.5  # Update with your own values
+    own_penalty_box_y_start = (68 - 40.3) / 2  # Update with your own values
+    own_penalty_box_y_end = (68 + 40.3) / 2  # Update with your own values
+    
+    opp_penalty_box_x_start = 105 - 16.5  # Update with your own values
+    opp_penalty_box_x_end = 105  # Update with your own values
+    opp_penalty_box_y_start = (68 - 40.3) / 2  # Update with your own values
+    opp_penalty_box_y_end = (68 + 40.3) / 2  # Update with your own values
+    
+    # Aerials inside own penalty box
+    own_penalty_box_events = events_df[
+        ((filtered_events['start_x'] >= own_penalty_box_x_start) & (filtered_events['start_x'] <= own_penalty_box_x_end) &
+         (filtered_events['start_y'] >= own_penalty_box_y_start) & (filtered_events['start_y'] <= own_penalty_box_y_end))
+    ]
+    
+    # Aerials inside opponent's penalty box
+    opp_penalty_box_events = events_df[
+        ((filtered_events['start_x'] >= opp_penalty_box_x_start) & (filtered_events['start_x'] <= opp_penalty_box_x_end) &
+         (filtered_events['start_y'] >= opp_penalty_box_y_start) & (filtered_events['start_y'] <= opp_penalty_box_y_end))
+    ]
+
+    own_penalty_box_total_events = len(own_penalty_box_events)
+    own_penalty_box_successful_events = len(own_penalty_box_events[own_penalty_box_events['result_name']=='success'])
+    own_penalty_box_success_percentage = (own_penalty_box_successful_events / own_penalty_box_total_events) * 100
+
+    opp_penalty_box_total_events = len(opp_penalty_box_events)
+    opp_penalty_box_successful_events = len(opp_penalty_box_events[opp_penalty_box_events['result_name']=='success'])
+    opp_penalty_box_success_percentage = (opp_penalty_box_successful_events / opp_penalty_box_total_events) * 100
+
+    own_percentage_label = f"Own Penalty Box Success %: {own_penalty_box_success_percentage:.2f}%"
+
+    opp_percentage_label = f"Opponent's Penalty Box Success %: {opp_penalty_box_success_percentage:.2f}%"
+
+    label1 = f"Total {selected_type_name_readable}: {total_events}"
+    label2 = f"Successful %: {success_percentage:.2f}%"
+    label3 = f"Successful % in own Pen Box: {own_penalty_box_success_percentage:.2f}%"
+    label4 = f"Successful % in opp Pen Box: {opp_penalty_box_success_percentage:.2f}%"
+
+    axs['endnote'].text(0, 1.5, f"{label1}", va='center', ha='left', fontsize=8,color='#dee6ea')
+    axs['endnote'].text(0, 1.0, f"{label2}", va='center', ha='left', fontsize=8,color='green')
+    axs['endnote'].text(0, 0.5, f"{label3}", va='center', ha='left', fontsize=8,color='cyan')
+    axs['endnote'].text(0, 0, f"{label4}", va='center', ha='left', fontsize=8,color='red')
+
   
   elif ((selected_type_name == 'Open Play Assist')):
     filtered_events = events_df[(events_df['open_play_assist'] == 1)]
@@ -711,6 +794,10 @@ if len(selected_match_ids)>0:
     pitch.scatter(filtered_events.end_x, filtered_events.end_y,
                     ax=axs['pitch'], color=colour_success, s=15)
     
+    label1 = f"Total {selected_type_name_readable}: {len(filtered_events)}"
+
+    axs['endnote'].text(0, 0.8, f"{label1}", va='center', ha='left', fontsize=10,color='#dee6ea')
+    
   elif ((selected_type_name == 'Set-Piece Assist')):
     filtered_events = events_df[(events_df['set_piece_assist'] == 1)]
 
@@ -722,13 +809,20 @@ if len(selected_match_ids)>0:
     pitch.scatter(filtered_events.end_x, filtered_events.end_y,
                     ax=axs['pitch'], color=colour_success, s=15)
     
+    label1 = f"Total {selected_type_name_readable}: {len(filtered_events)}"
+
+    axs['endnote'].text(0, 0.8, f"{label1}", va='center', ha='left', fontsize=10,color='#dee6ea')
+    
   elif ((selected_type_name == 'Most Dangerous Passes')):
     filtered_events = events_df[(events_df['type_name'] == 'pass') & (events_df['result_name'] == 'success')]
-    filtered_events=filtered_events.sort_values(by='xT_value', ascending=False).head(10)
+
+    num_passes_to_display = st.slider(f"Select the number of {selected_type_name_readable} to display:", min_value=1, max_value=len(filtered_events), value=10)
+
+    filtered_events=filtered_events.sort_values(by='xT_value', ascending=False).head(num_passes_to_display)
 
     pitch.lines(filtered_events.start_x, filtered_events.start_y,
                         filtered_events.end_x, filtered_events.end_y,
-                        lw=2, transparent=True, comet=True, label=f'Most Dangerous Passes (10)',
+                        lw=2, transparent=True, comet=True, label=f'Most Dangerous Passes ({num_passes_to_display})',
                         color=colour_success, ax=axs['pitch'])
     
     pitch.scatter(filtered_events.end_x, filtered_events.end_y,
@@ -750,18 +844,57 @@ if len(selected_match_ids)>0:
 
         # Additional: Change the color of the colorbar's ticks
     plt.setp(plt.getp(cb.ax.axes, 'xticklabels'), color='#dee6ea')
+
+    total_xT = filtered_events['xT_value'].sum()
+    average_xT_per_pass = total_xT / len(filtered_events)
+
+    label1 = f"Total {selected_type_name_readable}: {len(filtered_events)}"
+    label2 = f"Total xT: {total_xT:.2f} - Average per Pass: {average_xT_per_pass:.2f}"
+
+    axs['endnote'].text(0, 0.95, f"{label1}", va='center', ha='left', fontsize=10,color='#dee6ea')
+    axs['endnote'].text(0, 0.2, f"{label2}", va='center', ha='left', fontsize=10,color='green')
+
   
   elif ((selected_type_name == 'Most Dangerous Carries')):
     filtered_events = events_df[(events_df['type_name'] == 'dribble') & (events_df['result_name'] == 'success')]
-    filtered_events=filtered_events.sort_values(by='xT_value', ascending=False).head(10)
+
+    num_passes_to_display = st.slider(f"Select the number of {selected_type_name_readable} to display:", min_value=1, max_value=len(filtered_events), value=10)
+
+    filtered_events=filtered_events.sort_values(by='xT_value', ascending=False).head(num_passes_to_display)
 
     pitch.lines(filtered_events.start_x, filtered_events.start_y,
                         filtered_events.end_x, filtered_events.end_y,
-                        lw=2, transparent=True, comet=True, label=f'Most Dangerous Carries (10)',
+                        lw=2, transparent=True, comet=True, label=f'Most Dangerous Carries ({num_passes_to_display})',
                         color=colour_success, ax=axs['pitch'])
     
     pitch.scatter(filtered_events.end_x, filtered_events.end_y,
-                    ax=axs['pitch'], color=colour_success, s=15)
+                    ax=axs['pitch'], c=filtered_events['xT_value'], cmap='viridis', s=15)
+    
+    norm = mpl.colors.Normalize(vmin=filtered_events['xT_value'].min(), vmax=filtered_events['xT_value'].max())
+
+    # Create a colorbar for the colormap
+    sm = plt.cm.ScalarMappable(cmap='viridis', norm=norm)  # Use cmap_success or cmap_fail as needed
+    sm.set_array([])
+
+    # Add the colorbar to the plot
+    cb = plt.colorbar(sm, ax=axs['endnote'], orientation='horizontal',aspect=80)
+    cb.set_label('xThreat', color = '#dee6ea' )   
+
+    # Change color of the colorbar's tick labels
+    cb.ax.xaxis.set_tick_params(color='#dee6ea')  # Change 'white' to any suitable color
+    cb.ax.xaxis.label.set_color('#dee6ea')  # Change 'white' to the color of your choice
+
+        # Additional: Change the color of the colorbar's ticks
+    plt.setp(plt.getp(cb.ax.axes, 'xticklabels'), color='#dee6ea')
+    
+    total_xT = filtered_events['xT_value'].sum()
+    average_xT_per_carry = total_xT / len(filtered_events)
+
+    label1 = f"Total {selected_type_name_readable}: {len(filtered_events)}"
+    label2 = f"Total xT: {total_xT:.2f} - Average per Pass: {average_xT_per_carry:.2f}"
+
+    axs['endnote'].text(0, 0.95, f"{label1}", va='center', ha='left', fontsize=10,color='#dee6ea')
+    axs['endnote'].text(0, 0.2, f"{label2}", va='center', ha='left', fontsize=10,color='green')
     
   elif ((selected_type_name == 'Attacking Third Passes')):
     filtered_events = events_df[(events_df['type_name'] == 'pass') & (events_df['result_name'] == 'success') 
@@ -774,6 +907,12 @@ if len(selected_match_ids)>0:
     
     pitch.scatter(filtered_events.end_x, filtered_events.end_y,
                     ax=axs['pitch'], color=colour_success, s=15)
+    
+    total_events = len(filtered_events)
+
+    label1 = f"Total {selected_type_name_readable}: {total_events}"
+
+    axs['endnote'].text(0, 0.8, f"{label1}", va='center', ha='left', fontsize=10,color='#dee6ea')
   
   elif ((selected_type_name == 'Attacking Third Carries')):
     filtered_events = events_df[(events_df['type_name'] == 'dribble') & (events_df['result_name'] == 'success') 
@@ -786,6 +925,13 @@ if len(selected_match_ids)>0:
     
     pitch.scatter(filtered_events.end_x, filtered_events.end_y,
                     ax=axs['pitch'], color=colour_success, s=15)
+    
+    total_events = len(filtered_events)
+
+    label1 = f"Total {selected_type_name_readable}: {total_events}"
+
+    axs['endnote'].text(0, 0.8, f"{label1}", va='center', ha='left', fontsize=10,color='#dee6ea')
+
   elif ((selected_type_name == 'Penalty Box Passes')):
     pitch_length = 105
     pitch_width = 68
@@ -808,6 +954,12 @@ if len(selected_match_ids)>0:
     
     pitch.scatter(filtered_events.end_x, filtered_events.end_y,
                     ax=axs['pitch'], color=colour_success, s=15)
+    
+    total_events = len(filtered_events)
+
+    label1 = f"Total {selected_type_name_readable}: {total_events}"
+
+    axs['endnote'].text(0, 0.8, f"{label1}", va='center', ha='left', fontsize=10,color='#dee6ea')
   
   elif ((selected_type_name == 'Penalty Box Carries')):
     pitch_length = 105
@@ -830,7 +982,14 @@ if len(selected_match_ids)>0:
                         color=colour_success, ax=axs['pitch'])
     
     pitch.scatter(filtered_events.end_x, filtered_events.end_y,
-                    ax=axs['pitch'], color=colour_success, s=15)  
+                    ax=axs['pitch'], color=colour_success, s=15) 
+
+    total_events = len(filtered_events)
+
+    label1 = f"Total {selected_type_name_readable}: {total_events}"
+
+    axs['endnote'].text(0, 0.8, f"{label1}", va='center', ha='left', fontsize=10,color='#dee6ea')
+
   elif ((selected_type_name == 'Progressive Passes')):
     # Constants for pitch halves
     own_half = 52.5
@@ -858,6 +1017,17 @@ if len(selected_match_ids)>0:
     pitch.scatter(filtered_events.end_x, filtered_events.end_y,
                   ax=axs['pitch'], color=colour_success, s=15)
     
+    total_distance = (filtered_events['end_x'] - filtered_events['start_x']).sum()
+    average_distance_per_pass = total_distance / len(filtered_events)
+        
+    total_events = len(filtered_events)
+
+    label1 = f"Total {selected_type_name_readable}: {total_events}"
+    label2 = f"Total Distance: {total_distance:.2f} - Average per Pass: {average_distance_per_pass:.2f}"
+
+    axs['endnote'].text(0, 0.95, f"{label1}", va='center', ha='left', fontsize=10,color='#dee6ea')
+    axs['endnote'].text(0, 0.2, f"{label2}", va='center', ha='left', fontsize=10,color='green')
+    
   elif ((selected_type_name == 'Progressive Carries')):
         # Constants for pitch halves
     own_half = 52.5
@@ -884,6 +1054,17 @@ if len(selected_match_ids)>0:
     
     pitch.scatter(filtered_events.end_x, filtered_events.end_y,
                   ax=axs['pitch'], color=colour_success, s=15)
+    
+    total_distance = (filtered_events['end_x'] - filtered_events['start_x']).sum()
+    average_distance_per_carry = total_distance / len(filtered_events)
+        
+    total_events = len(filtered_events)
+
+    label1 = f"Total {selected_type_name_readable}: {total_events}"
+    label2 = f"Total Distance: {total_distance:.2f} - Average per Carry: {average_distance_per_carry:.2f}"
+
+    axs['endnote'].text(0, 0.95, f"{label1}", va='center', ha='left', fontsize=10,color='#dee6ea')
+    axs['endnote'].text(0, 0.2, f"{label2}", va='center', ha='left', fontsize=10,color='green')
       
   elif ((selected_type_name == 'Goal Creating Actions')):
     filtered_events = events_df[(events_df['goal_creating_action'] == 1) & (events_df['result_name'] == 'success') & (events_df['type_name'].isin(action))]
@@ -930,6 +1111,13 @@ if len(selected_match_ids)>0:
             else:
               pitch.lines(event["start_x"], event["start_y"], event["end_x"], event["end_y"],
                         lw=2, transparent=True, comet=True, ax=axs['pitch'], color=color)
+              
+    total_events = len(filtered_events)
+
+    label1 = f"Total {selected_type_name_readable}: {total_events}"
+
+    axs['endnote'].text(0, 0.8, f"{label1}", va='center', ha='left', fontsize=10,color='#dee6ea')
+
   elif ((selected_type_name == 'Shot Creating Actions')):
     filtered_events = events_df[(events_df['shot_creating_action'] == 1) & (events_df['result_name'] == 'success')]
 
@@ -975,8 +1163,14 @@ if len(selected_match_ids)>0:
             else:
               pitch.lines(event["start_x"], event["start_y"], event["end_x"], event["end_y"],
                         lw=2, transparent=True, comet=True, ax=axs['pitch'], color=color)
+              
+    total_events = len(filtered_events)
+
+    label1 = f"Total {selected_type_name_readable}: {total_events}"
+
+    axs['endnote'].text(0, 0.8, f"{label1}", va='center', ha='left', fontsize=10,color='#dee6ea')
     
-  #"Goal Creating Actions","Shot Creating Actions", "Progressive Passes","Progressive Carries",Most common pass clusters
+  #Most common pass clusters
     
   # Display the plot in Streamlit
   legend = axs['pitch'].legend(facecolor='#B2BEB5', edgecolor='None', fontsize=7, loc='upper left', handlelength=1)
@@ -1012,8 +1206,8 @@ with st.expander('Events Manual'):
       23. Goal: A shot that leads to a goal
       24. Open Play Assist: Assists from open play situations
       25. Set-Piece Assist: Assists from set-pieces
-      26. Most Dangerous Passes(10): Top-10 Most Dangerous Passes sorted by their xT value
-      27. Most Dangerous Carries(10): Top-10 Most Dangerous Carries sorted by their xT value
+      26. Most Dangerous Passes: Most Dangerous Passes sorted by their xT value
+      27. Most Dangerous Carries: Most Dangerous Carries sorted by their xT value
       28. Attacking Third Passes: Passes completed in the attacking third
       29. Attacking Third Carries: Carries completed in the attacking third
       30. Progressive Passes: A forward pass that attempts to advance a team significantly closer to the opponent’s goal (WyScout implementation)
@@ -1024,4 +1218,5 @@ with st.expander('Events Manual'):
       35. Penalty Box Passes: Passes into the penalty box
       36. Penalty Box Carries: Ball Carries into the penalty box
     ''')
+
 
