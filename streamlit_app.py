@@ -454,7 +454,7 @@ if len(selected_match_ids)>0:
   else:
     #events_df = get_teams_events(selected_team, selected_match_ids)
 
-    custom_metrics = ["Aerials","Open Play Assist","Set-Piece Assist","Goal Creating Actions","Shot Creating Actions","Most Dangerous Passes"
+    custom_metrics = ["Aerials","Open Play Assist","Set-Piece Assist","Goal Creating Actions","Shot Creating Actions","Most Dangerous Passes","Most Dangerous Carries"
                            ,"Attacking Third Passes", "Attacking Third Carries", "Progressive Passes","Progressive Carries","Penalty Box Passes","Penalty Box Carries"]
 
     unique_type_names.extend(custom_metrics)
