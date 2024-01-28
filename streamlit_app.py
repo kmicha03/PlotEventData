@@ -758,14 +758,22 @@ if len(selected_match_ids)>0:
         ((filtered_events['start_x'] >= opp_penalty_box_x_start) & (filtered_events['start_x'] <= opp_penalty_box_x_end) &
          (filtered_events['start_y'] >= opp_penalty_box_y_start) & (filtered_events['start_y'] <= opp_penalty_box_y_end))
     ]
-
+    
     own_penalty_box_total_events = len(own_penalty_box_events)
     own_penalty_box_successful_events = len(own_penalty_box_events[own_penalty_box_events['result_name']=='success'])
-    own_penalty_box_success_percentage = (own_penalty_box_successful_events / own_penalty_box_total_events) * 100
 
+    if own_penalty_box_total_events != 0:
+        own_penalty_box_success_percentage = (own_penalty_box_successful_events / own_penalty_box_total_events) * 100
+    else:
+        own_penalty_box_success_percentage = 0  # or set it to some default value or handle it in a way that makes sense for your application
+    
     opp_penalty_box_total_events = len(opp_penalty_box_events)
     opp_penalty_box_successful_events = len(opp_penalty_box_events[opp_penalty_box_events['result_name']=='success'])
-    opp_penalty_box_success_percentage = (opp_penalty_box_successful_events / opp_penalty_box_total_events) * 100
+
+    if opp_penalty_box_total_events != 0:
+        opp_penalty_box_success_percentage = (opp_penalty_box_successful_events / opp_penalty_box_total_events) * 100
+    else:
+        opp_penalty_box_success_percentage = 0
 
     own_percentage_label = f"Own Penalty Box Success %: {own_penalty_box_success_percentage:.2f}%"
 
