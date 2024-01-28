@@ -898,7 +898,7 @@ if len(selected_match_ids)>0:
     average_xT_per_carry = total_xT / len(filtered_events)
 
     label1 = f"Total {selected_type_name_readable}: {len(filtered_events)}"
-    label2 = f"Total xT: {total_xT:.2f} - Average per Pass: {average_xT_per_carry:.2f}"
+    label2 = f"Total xT: {total_xT:.2f} - Average per Carry: {average_xT_per_carry:.2f}"
 
     axs['endnote'].text(0, 0.95, f"{label1}", va='center', ha='left', fontsize=10,color='#dee6ea')
     axs['endnote'].text(0, 0.2, f"{label2}", va='center', ha='left', fontsize=10,color='green')
